@@ -1,0 +1,1164 @@
+<!doctype html>
+<html>
+<head>
+<meta name="referrer" content="same-origin"/>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8">
+    <meta name="keywords" content="猫站" />
+        <meta name="generator" content="NexusPHP" />
+    <title>ＰＴ之友俱乐部 :: 搜索结果 - 口之法则 PTerClub</title>
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="styles/mediumfont.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="styles/sprites.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="pic/forum_pic/chs/forumsprites.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="styles/ddlevelsmenu-base.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="/js/jquery-confirm/jquery-confirm.min.css?v3.3.4" />
+<link rel="stylesheet" href="styles/common.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="styles/BlasphemyOrange/theme.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="styles/BlasphemyOrange/DomTT.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="styles/curtain_imageresizer.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="styles/asidenav.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="styles/tags.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="styles/tImg.css?202410212335" type="text/css" />
+<link rel="stylesheet" href="styles/layui.css?202410212335" type="text/css" />
+<link rel='stylesheet' href='pic/category/chd/scenetorrents/catsprites.css?202410212335' type='text/css' />
+
+<style>
+	.jconfirm-content {
+		font-size: 14px;
+	}
+
+	@media screen and (max-width: 736px) {
+		.jconfirm-box  {
+			width: 100% !important;
+			margin: 20px !important;
+			max-width: 670px !important;
+		}
+	}
+
+    #sql_debug {
+        display: none;
+        z-index: 999;
+        position: fixed;
+        top: 40px;
+        right: 65px;
+        background: beige;
+        height: 85%;
+        overflow: scroll;
+        width: 80%;
+        max-width: 1800px;
+        /*margin: 2rem auto;*/
+        padding: 1rem;
+        text-align: left;
+        border: 1px solid #efefef;
+        border-radius: 0.5rem;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace !important;
+        font-size: 12px !important;
+    }
+
+    #sql_debug ol {
+        margin: 10px;
+        border: 1px solid #a8a8a8;
+        border-radius: 0.5rem;
+        padding-left: 30px;
+        line-height: 24px !important;
+        margin: 10px 10px 40px 10px;
+    }
+
+    #debug-btn {
+        position: fixed;
+        top: 340px;
+        right: 5px;
+        border-radius: 3px;
+        width: 40px;
+        /*background-color: #f44336;*/
+        display: inline-block;
+        padding: 40px 5px 30px 5px;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace !important;
+        font-size: 40px !important;
+    }
+
+    #faq-panel {
+        position: fixed;
+        bottom: 80px;
+        left: 5px;
+        height: 420px;
+        width: 240px;
+        overflow: hidden;
+        padding: 1rem;
+        text-align: left;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 0.5rem;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace !important;
+        font-size: 12px !important;
+        filter:alpha(Opacity=80);-moz-opacity:0.8;opacity: 0.8;
+    }
+
+    #faq-panel a {
+        width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        display: inline-block;
+    }
+
+    #faq-btn {
+        position: fixed;
+        bottom: 80px;
+        left: 3px;
+        border-radius: 3px;
+        /*width: 70px;*/
+        display: inline-block;
+        padding: 40px 5px 0px 5px;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace !important;
+        font-size: 40px !important;
+        outline: none;
+    }
+
+    #faq-btn img {
+        max-width: 90px;
+    }
+
+
+</style>
+
+<link rel="alternate" type="application/rss+xml" title="Latest Torrents" href="torrentrss.php" />
+<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="js/polyfill.js?202410212335"></script>
+<script src="/js/jquery-confirm/jquery-confirm.min.js?v3.3.4"></script>
+<script type="text/javascript" src="curtain_imageresizer.js?202410212335"></script>
+<script type="text/javascript" src="ajaxbasic.js?202410212335"></script>
+<script type="text/javascript" src="common.js?202410212335"></script>
+<script type="text/javascript" src="domLib.js?202410212335"></script>
+<script type="text/javascript" src="domTT.js?202410212335"></script>
+<script type="text/javascript" src="domTT_drag.js?202410212335"></script>
+<script type="text/javascript" src="fadomatic.js?202410212335"></script>
+<script type="text/javascript" src="js/scrollcontrol.js"></script>
+<script type="text/javascript" src="js/ddlevelsmenu.js?202410212335"></script>
+<script type="text/javascript" src="/js/lozad.min.js?202410212335"></script>
+
+<script>
+/**
+ * tr img preview
+ * @author: ttys3
+ * @date: 2029-03-11
+ */
+const trPreviewImgHeightLimit = 420;
+const getProxyImg = function(imgURL, height) {
+        // return `//images.weserv.nl/?url=${encodeURIComponent(imgURL)}&h=${height}`;
+    return imgURL;
+};
+
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
+// https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy
+const setImgReferrerPolicy = function(imgEle) {
+    if (imgEle.src.startsWith('https://imgproxy.pterclub.com/')) {
+            imgEle.referrerPolicy = "origin";
+    } else {
+        imgEle.referrerPolicy = "same-origin";
+    }
+}
+
+// @author: ttys3
+const ttys3TrPreviewInit = function () {
+    const observer = lozad('.lozad', {
+        rootMargin: '10px 0px', // syntax similar to that of CSS Margin
+        threshold: 0.1, // ratio of element convergence
+        load: function(el) {
+            // console.log('loading element: %s', el.dataset.src);
+            // el.src = getProxyImg(el.dataset.orig, 46*2);
+            setImgReferrerPolicy(el);
+            el.src = getProxyImg(el.dataset.orig, trPreviewImgHeightLimit*2);
+        }
+    });
+    observer.observe();
+};
+window.addEventListener("load", ttys3TrPreviewInit, false);
+
+// Discovered here: http://stackoverflow.com/a/32623832/867154
+// Many thanks to @RoboCat!
+const absolutePosition = function (el) {
+    let found, left = 0, top = 0, width = 0, height = 0, offsetBase = absolutePosition.offsetBase;
+
+    if (!offsetBase && document.body) {
+        offsetBase = absolutePosition.offsetBase = document.createElement('div');
+        offsetBase.style.cssText = 'position:absolute;left:0;top:0';
+        document.body.appendChild(offsetBase);
+    }
+
+    if (el && el.ownerDocument === document && 'getBoundingClientRect' in el && offsetBase) {
+        var boundingRect = el.getBoundingClientRect();
+        var baseRect 	 = offsetBase.getBoundingClientRect();
+        found 			 = true;
+        left 			 = boundingRect.left - baseRect.left;
+        top 			 = boundingRect.top - baseRect.top;
+        width 			 = boundingRect.right - boundingRect.left;
+        height 			 = boundingRect.bottom - boundingRect.top;
+    }
+
+    return {
+        found: found,
+        left: left,
+        top: top,
+        width: width,
+        height: height,
+        right: left + width,
+        bottom: top + height
+    };
+};
+
+// @author: ttys3
+const trPreview = function (el, show) {
+    el.style.cursor = 'default';
+    const targetId = `torrent-preview-${el.dataset.torrent}`;
+    let pr = document.querySelector(`#${targetId}`);
+    if (pr == null) {
+        const tmpl = `<div id="${targetId}" data-loaded="no" style="display: none; z-index: 9999; position: absolute; will-change: transform; left: 0; top: 0;"></div>`;
+        document.body.insertAdjacentHTML('beforeend', tmpl);
+        pr = document.querySelector(`#${targetId}`);
+    }
+
+    // load only if not loaded
+    if (pr.dataset.loaded !== 'yes') {
+        el.style.cursor = 'progress';
+
+        let proxyImg = getProxyImg(el.dataset.orig, trPreviewImgHeightLimit*2);
+        // fast fail according prev result (after lozad load)
+        if (el.src === el.dataset.orig) {
+            proxyImg = el.dataset.orig;
+        }
+        //<img class="tr-preview-img" src="${proxyImg}" alt="tr-preview" />
+        const imgEle = new Image();
+        // onload comes for to avoid small img event not triggered
+        imgEle.onload = function() {
+            el.style.cursor = 'default';
+            // console.log("Image %s ready to append", proxyImg);
+            pr.innerHTML = '';
+            pr.insertAdjacentElement('afterbegin', imgEle);
+            pr.dataset.loaded = 'yes';
+        };
+        imgEle.onerror = function() {
+            el.style.cursor = 'default';
+            // prevent infinite loop
+            if (imgEle.src != el.dataset.orig) {
+                // console.log("Image %s preload failed, fallback to orig: %s", proxyImg, el.dataset.orig);
+                imgEle.src = el.dataset.orig;
+                pr.innerHTML = '';
+                pr.insertAdjacentElement('afterbegin', imgEle);
+                pr.dataset.loaded = 'yes';
+            }
+        };
+        imgEle.style = `max-height: ${trPreviewImgHeightLimit}px !important;`;
+        imgEle.src = proxyImg;
+        setImgReferrerPolicy(imgEle);
+        imgEle.alt = 'tr preview img';
+    }
+
+    if (show !== undefined && show === false) {
+        return;
+    }
+
+    const pos = absolutePosition(el);
+    // console.log('trPreview: %o, pos: %o', el.dataset.orig, pos);
+    let toY = parseInt(pos.top)+el.getBoundingClientRect().height/10*9;
+
+    // console.log('viewport_y: %o, pos.bottom: %o', window.scrollY + window.innerHeight, pos.bottom);
+
+    if (document.body.clientHeight - pos.bottom < trPreviewImgHeightLimit) {
+        // prevent bottom shake
+        toY = parseInt(pos.bottom) - trPreviewImgHeightLimit - el.getBoundingClientRect().height/10*9;
+    } else if (window.scrollY + window.innerHeight - pos.bottom < trPreviewImgHeightLimit) {
+        //bottom position of current viewport: window.scrollY + window.innerHeight
+        toY = parseInt(pos.bottom) - trPreviewImgHeightLimit - el.getBoundingClientRect().height/10*9;
+    }
+    pr.style.transform = `translate3d(${parseInt(pos.left)+el.getBoundingClientRect().width/10*9}px, ${toY}px, 0px)`;
+    pr.style.display = 'block';
+};
+
+// @author: ttys3
+const trPreviewOut = function (el) {
+    el.style.cursor = 'default';
+    const targetId = `torrent-preview-${el.dataset.torrent}`;
+    const pr = document.querySelector(`#${targetId}`);
+    if (pr) {
+        pr.style.display = 'none';
+    }
+};
+</script>
+    <style>
+    .show{display: block;}
+    .hide{display: none;}
+
+	#kdescr img, #kdescription img {
+		max-width: 890px !important;
+		object-fit: contain;
+	}
+</style>
+<script>
+  function hidebutton(e){
+    let hideEle = e.parentNode.nextSibling;
+    let show = hideEle.classList.contains('show');
+    if(show){
+      hideEle.classList.remove('show');
+      hideEle.classList.add('hide');
+    }else{
+      hideEle.classList.remove('hide');
+      hideEle.classList.add('show');
+    }
+  }
+
+  function divToggle(obj) {
+      const target = obj.dataset.target;
+      const targetDiv = document.querySelector(target);
+      if (targetDiv.style.display != 'none') {
+          targetDiv.style.display = 'none';
+      } else {
+          targetDiv.style.display = 'block';
+      }
+  }
+
+  function faqToggle(obj) {
+      const target = obj.dataset.target;
+      const targetDiv = document.querySelector(target);
+      const btn = document.querySelector('#faq-btn');
+      if (targetDiv.style.display != 'none') {
+          targetDiv.style.display = 'none';
+          btn.style.visibility = 'visible';
+      } else {
+          targetDiv.style.display = 'block';
+          btn.style.visibility = 'hidden';
+      }
+  }
+</script>
+<script type="text/javascript">
+  ddlevelsmenu.setup("ddtopmenubar", "topbar")
+</script>
+<script language="javascript" type="text/javascript" charset="utf-8">
+function logoutconfirm() {
+    if (confirm("<p>真的要退出吗？</p>")==true){    return true;
+  }else{
+    return false;
+  }
+}
+function requestconfirm() {
+    if (confirm("真的要求片吗？发布求片帖子将会扣除猫粮的啊！\n\n请确定！")==true){    return true;
+  }else{
+    return false;
+  }
+}
+</script>
+<!--  WYSIBB-->
+  <script type="text/javascript" src="ext/wysibb/jquery.wysibb.js?202410212335"></script>
+      <script src="ext/wysibb/lang/chs.js"></script>
+      <script>
+    jQuery(document).ready(function() {
+      var wbbOpt = {
+        buttons: "bold,underline,justifycenter,table,|,fontcolor,fontsize,fontfamily,|,img,video,link,|,code,hide,quote,|,hidemediainfo,hidebdinfo,",
+        lang: "chs",
+        allButtons: {
+          code:{
+            transform:{
+              '<br /><div class="codetop">代码</div><div class="codemain">{SELTEXT}</div><br />':'[code]{SELTEXT}[/code]'
+            }
+          },
+          hide:{
+            transform:{
+              '<br /><div class="codetop">隐藏内容 (点击此处切换 显示/隐藏)</div><div class="codemain">{SELTEXT}</div><br />':'[hide]{SELTEXT}[/hide]',
+              '<br /><div class="codetop">{NAME}</div><div class="codemain">{SELTEXT}</div><br />':'[hide={NAME}]{SELTEXT}[/hide]'
+            }
+          },
+          quote:{
+            transform:{
+              '<fieldset><legend> 引用 </legend><br />{SELTEXT}</fieldset><br />':'[quote]{SELTEXT}[/quote]',
+              '<fieldset><legend> {NAME} </legend><br />{SELTEXT}</fieldset><br />':'[quote={NAME}]{SELTEXT}[/quote]'
+            }
+          },
+          fs_extremesmall: {
+              title: CURLANG.fs_extremesmall,
+              buttonText: "fs1",
+              excmd: 'fontSize',
+              exvalue: "1",
+              transform: {
+                  '<font size="1">{SELTEXT}</font>':'[size=1]{SELTEXT}[/size]'
+              }
+          },
+          fs_verysmall: {
+              title: CURLANG.fs_verysmall,
+              buttonText: "fs2",
+              excmd: 'fontSize',
+              exvalue: "2",
+              transform: {
+                  '<font size="2">{SELTEXT}</font>':'[size=2]{SELTEXT}[/size]'
+              }
+          },
+          fs_small: {
+              title: CURLANG.fs_small,
+              buttonText: "fs3",
+              excmd: 'fontSize',
+              exvalue: "3",
+              transform: {
+                  '<font size="3">{SELTEXT}</font>':'[size=3]{SELTEXT}[/size]'
+              }
+          },
+          fs_normal: {
+              title: CURLANG.fs_normal,
+              buttonText: "fs4",
+              excmd: 'fontSize',
+              exvalue: "4",
+              transform: {
+                  '<font size="4">{SELTEXT}</font>':'[size=4]{SELTEXT}[/size]'
+              }
+          },
+          fs_big: {
+              title: CURLANG.fs_big,
+              buttonText: "fs5",
+              excmd: 'fontSize',
+              exvalue: "5",
+              transform: {
+                  '<font size="5">{SELTEXT}</font>':'[size=5]{SELTEXT}[/size]'
+              }
+          },
+          fs_verybig: {
+              title: CURLANG.fs_verybig,
+              buttonText: "fs6",
+              excmd: 'fontSize',
+              exvalue: "6",
+              transform: {
+                  '<font size="6">{SELTEXT}</font>':'[size=6]{SELTEXT}[/size]'
+              }
+          },
+          fs_extremebig: {
+              title: CURLANG.fs_extremebig,
+              buttonText: "fs7",
+              excmd: 'fontSize',
+              exvalue: "7",
+              transform: {
+                  '<font size="7">{SELTEXT}</font>':'[size=7]{SELTEXT}[/size]'
+              }
+          },
+      }
+    };
+        let bbtextarea = jQuery("textarea[class=\"bbcode\"]");
+        if (bbtextarea.length > 0) {
+            let bbobj = bbtextarea.wysibb(wbbOpt).data('wbb');
+            bbobj.modeSwitch();
+            jQuery('.modesw').parent().addClass('on');
+        }
+    })
+  </script>
+    <link rel="stylesheet" href="ext/wysibb/theme/nexusphp/wbbtheme.css" />
+  <style type="text/css">.wysibb{width:750px;}</style>
+<!--  /WYSIBB-->
+<!-- \CC\ED\BC\D3 $script \B2\CE\CA\FD֧\B3\D6-->
+     <!-- //\CC\ED\BC\D3 $script \B2\CE\CA\FD֧\B3\D6-->
+</head>
+
+<body>
+<table class="head" cellspacing="0" cellpadding="0" align="center">
+    <tr>
+        <td class="clear">
+            <div>
+            <div style="float:left; margin: -0px 0px 0px 0px;"><img src="pic/PTer.Club_Logo_2025.png" style="border-radius: 6px;" alt="ＰＴ之友俱乐部" width="148" height="84" title="ＰＴ之友俱乐部 - 我们一起喵喵喵喵喵" /></div>
+
+                            <div style="float:right; margin: -0px 0px 0px 0px; display: inline-flex;">
+                    <a href="/sitefreepool.php">
+                        <div style="height: 84px; width: 80px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                                        <img class="animate-bounce" src="storage/uploadpicz/misc/freepool.png" height="56px" alt="global site free pool">
+                            <div style="margin-top: 4px; display: inline-flex; width: 100%; height: 4px; align-items: center;">
+                                <div style="flex: 1; height: 100%; border: 1px solid #999; border-radius: 3px; background: white; overflow: hidden;">
+                                    <div style="width: 18%; height: 100%; background: #22c55e; border-radius: 2px;"></div>
+                                </div>
+                                <span style="margin-left: 2px; font-size: 10px;">18%</span>
+                            </div>
+                                                                                </div>
+                    </a>
+                                </div>
+            
+                <div style="position:relative; text-align:center; margin: 4px 200px;"><a href="/details.php?id=503351"><img class="shadow rounded-sm" src="storage/uploadpicz/welfare/week202510welfare.jpg" width="450" height="84" /></a></div></div>            <!--<div align="center"><a href="/details.php?id=2257"><img src="pic/Banner.jpg" width="982" height="287" /></a></div>-->
+                </td>
+        <td class="clear nowrap" align="right" valign="middle">
+    <div class="aside-nav bounceInUp animated" id="aside-nav" style="top: 350px; right: -85px;">"<label for="" class="aside-menu" title="">常用</label><a href="torrents.php" title="种子页面" class="menu-item menu-first">种子</a><a href="upload.php" title="发布页面" class="menu-item menu-second">发布</a><a href="forums.php" title="论坛页面" class="menu-item menu-third">论坛</a><a href=\userdetails.php?id=9565 title="用户信息" class="menu-item menu-line menu-fourth">个人<br>中心</a>        </div>
+    </td>
+  </tr>
+</table>
+
+<table class="mainouter" width="982" cellspacing="0" cellpadding="5" align="center">
+    <tr><td id="nav_block" class="text" align="center">
+    <table class="main" width="940" border="0" cellspacing="0" cellpadding="0"><tr><td class="embedded" ><div id="ddtopmenubar"><ul class="menu"><li><a href="index.php">&nbsp;首&nbsp;&nbsp;页&nbsp;</a></li><li><a href="forums.php">&nbsp;论&nbsp;&nbsp;坛&nbsp;</a></li><li class="selected"><a href="torrents.php" rel="ddsubmenu1">&nbsp;种&nbsp;&nbsp;子&nbsp;</a></li><ul id="ddsubmenu1" class="ddsubmenustyle"><li><a href="torrents.php" rel="ddsubmenu1">&nbsp;所有</a><li><a href="torrents.php?tag_internal=no">&nbsp;非官方</a><li><a href="torrents.php?cat=401">&nbsp;电影</a><ul><li><a>&nbsp;地区</a><ul><li><a href="torrents.php?cat401=1&team1=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;中国大陆</a></li><li><a href="torrents.php?cat401=1&team2=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;中国香港</a></li><li><a href="torrents.php?cat401=1&team3=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;中国台湾</a></li><li><a href="torrents.php?cat401=1&team4=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;英&nbsp;&nbsp;美</a></li><li><a href="torrents.php?cat401=1&team5=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;韩&nbsp;&nbsp;国</a></li><li><a href="torrents.php?cat401=1&team6=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;本</a></li><li><a href="torrents.php?cat401=1&team7=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;印&nbsp;&nbsp;度</a></li><li><a href="torrents.php?cat401=1&team8=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;其&nbsp;&nbsp;它</a></li></ul></li><li><a href="torrents.php?cat401=1&source1=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;4K</a></li><li><a href="torrents.php?cat401=1&source2=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;Blu-ray</a></li><li><a href="torrents.php?cat401=1&source3=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;Remux</a></li><li><a href="torrents.php?cat401=1&source7=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;DVD</a></li><li><a href="torrents.php?cat401=1&source5=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;WEB-DL</a></li><li><a href="torrents.php?source6=1&incldead=1&spstate=0&inclbookmarked=0&search=1080p&search_area=0&search_mode=0">&nbsp;1080p</a><ul><li><a href="torrents.php?cat401=1&incldead=1&spstate=0&inclbookmarked=0&search=1080p+x265&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;x265</a></li><li><a href="torrents.php?cat401=1&incldead=1&spstate=0&inclbookmarked=0&search=1080p+x264&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;x264</a></li></ul></li><li><a href="torrents.php?source6=1&incldead=1&spstate=0&inclbookmarked=0&search=720p&search_area=0&search_mode=0">&nbsp;720p</a></li><li><a href="torrents.php?cat401=1&incldead=1&spstate=0&inclbookmarked=0&search=x265&search_area=0&search_mode=0">&nbsp;x265</a></li><li><a href="torrents.php?cat401=1&incldead=1&spstate=0&inclbookmarked=0&search=x264&search_area=0&search_mode=0">&nbsp;x264</a></li></ul></li><li><a href="torrents.php?cat=404">&nbsp;电视剧</a><ul><li><a href="torrents.php?cat404=1&team1=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;中国大陆</a></li><li><a href="torrents.php?cat404=1&team2=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;中国香港</a></li><li><a href="torrents.php?cat404=1&team3=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;中国台湾</a></li><li><a href="torrents.php?cat404=1&team4=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;英&nbsp;&nbsp;美</a></li><li><a href="torrents.php?cat404=1&team5=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;韩&nbsp;&nbsp;国</a></li><li><a href="torrents.php?cat404=1&team6=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;本</a></li><li><a href="torrents.php?cat404=1&team7=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;其&nbsp;&nbsp;它</a></li></ul></li><li><a href="torrents.php?cat=406">&nbsp;音乐&nbsp;</a><ul><li><a href="torrents.php?tag_mandarin=yes&cat406=1&incldead=0">&nbsp;&nbsp;&nbsp;国&nbsp;&nbsp;语</a><li><a href="torrents.php?tag_cantonese=yes&cat406=1&incldead=0">&nbsp;&nbsp;&nbsp;粤&nbsp;&nbsp;语</a><li><a href="torrents.php?cat406=1&team4=1&incldead=0">&nbsp;&nbsp;&nbsp;欧&nbsp;&nbsp;美</a><li><a href="torrents.php?cat406=1&team5=1&incldead=0">&nbsp;&nbsp;&nbsp;韩&nbsp;&nbsp;语</a><li><a href="torrents.php?cat406=1&team6=1&incldead=0">&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;语</a><li><a href="torrents.php?cat406=1&team7=1&team8=1&incldead=0&search_mode=1">&nbsp;&nbsp;&nbsp;其&nbsp;&nbsp;它</a></ul></li><li><a href="torrents.php?cat=418">&nbsp;演出</a><ul><li><a href="torrents.php?cat418=1&incldead=1&spstate=0&inclbookmarked=0&search=%E6%BC%94%E5%94%B1%E4%BC%9A&search_area=0&search_mode=2">&nbsp;演唱会</a><ul><li><a href="torrents.php?tag_mandarin=yes&cat418=1&incldead=1&spstate=0&inclbookmarked=0&search=%E6%BC%94%E5%94%B1%E4%BC%9A&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;国&nbsp;&nbsp;语</a><li><a href="torrents.php?tag_cantonese=yes&cat418=1&incldead=1&spstate=0&inclbookmarked=0&search=%E6%BC%94%E5%94%B1%E4%BC%9A&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;粤&nbsp;&nbsp;语</a><li><a href="torrents.php?cat418=1&team4=1&incldead=1&spstate=0&inclbookmarked=0&search=%E6%BC%94%E5%94%B1%E4%BC%9A&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;欧&nbsp;&nbsp;美</a><li><a href="torrents.php?cat418=1&team5=1&incldead=1&spstate=0&inclbookmarked=0&search=%E6%BC%94%E5%94%B1%E4%BC%9A&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;韩&nbsp;&nbsp;语</a><li><a href="torrents.php?cat418=1&team6=1&incldead=1&spstate=0&inclbookmarked=0&search=%E6%BC%94%E5%94%B1%E4%BC%9A&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;语</a><li><a href="torrents.php?tag_exclusive=&tag_internal=&tag_mandarin=&tag_cantonese=&tag_doityourself=&tag_master=&cat418=1&team7=1&team8=1&incldead=1&spstate=0&inclbookmarked=0&search=%E6%BC%94%E5%94%B1%E4%BC%9A&search_area=0&search_mode=1">&nbsp;&nbsp;&nbsp;其&nbsp;&nbsp;它</a></ul></li></ul></li><li><a href="torrents.php?incldead=1&spstate=0&inclbookmarked=0&search=搞笑视频&search_area=0&search_mode=0">&nbsp;搞笑</a></li><li><a href="torrents.php?cat=403">&nbsp;动画</a></li><li><a href="torrents.php?cat=405">&nbsp;综艺</a></li><li><a href="torrents.php?incldead=1&spstate=0&inclbookmarked=0&search=LikeArt&search_area=0&search_mode=0">&nbsp;艺术</a></li><li><a href="torrents.php?cat=402">&nbsp;纪录片</a></li><li><a href="torrents.php?cat=407">&nbsp;体育</a></li><li><a href="torrents.php?cat=408">&nbsp;电子书</a></li></ul><li><a href="music.php?tag_exclusive=&tag_internal=&tag_mandarin=&tag_cantonese=&tag_doityourself=&tag_master=&cat413=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0" rel="ddsubmenu1">&nbsp;Ｍ&nbsp;&nbsp;Ｖ&nbsp;</a></li><ul id="ddsubmenu1" class="ddsubmenustyle"><li><a href="music.php?tag_exclusive=&tag_internal=&tag_mandarin=&tag_cantonese=&tag_doityourself=&tag_master=&cat413=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0" rel="ddsubmenu1">&nbsp;&nbsp;&nbsp;所&nbsp;&nbsp;有</a></li><li><a href="music.php?cat413=1&team1=1&team2=1&team3=1&incldead=0&search_mode=1">&nbsp;&nbsp;&nbsp;华&nbsp;&nbsp;语</a></li><li><a href="music.php?tag_mandarin=yes&cat413=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;国&nbsp;&nbsp;语</a></li><li><a href="music.php?tag_cantonese=yes&cat413=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;粤&nbsp;&nbsp;语</a></li><li><a href="music.php?cat413=1&team4=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;欧&nbsp;&nbsp;美</a></li><li><a href="music.php?cat413=1&team5=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;韩&nbsp;&nbsp;语</a></li><li><a href="music.php?cat413=1&team6=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;语</a></li><li><a href="music.php?tag_exclusive=&tag_internal=&tag_mandarin=&tag_cantonese=&tag_doityourself=&tag_master=&cat413=1&team7=1&team8=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=1">&nbsp;&nbsp;&nbsp;其&nbsp;&nbsp;它</a></li></ul><li><a href="torrents.php?cat=409" rel="ddsubmenu1">&nbsp;游&nbsp;&nbsp;戏&nbsp;</a></li><ul id="ddsubmenu1" class="ddsubmenustyle"><li><a href="torrents.php?cat=409" rel="ddsubmenu1">&nbsp;&nbsp;&nbsp;所&nbsp;&nbsp;有</a></li><li><a>&nbsp;&nbsp;&nbsp;设&nbsp;&nbsp;备&nbsp;</a><ul><li><a>&nbsp;Microsoft</a><ul><li><a href="torrents.php?source16=1">&nbsp;Windows</a></li><li><a href="torrents.php?source17=1">&nbsp;DOS</a></li><li><a href="torrents.php?source18=1">&nbsp;Xbox</a></li><li><a href="torrents.php?source19=1">&nbsp;Xbox360</a></li></ul></li><li><a>&nbsp;Nintendo</a><ul><li><a href="torrents.php?source20=1">&nbsp;Switch</a></li><li><a href="torrents.php?source21=1">&nbsp;FC/NES</a></li><li><a href="torrents.php?source22=1">&nbsp;GB/GBC</a></li><li><a href="torrents.php?source23=1">&nbsp;SFC/SNES</a></li><li><a href="torrents.php?source24=1">&nbsp;GBA</a></li><li><a href="torrents.php?source25=1">&nbsp;N64</a></li><li><a href="torrents.php?source26=1">&nbsp;Virtual&nbsp;Boy</a></li><li><a href="torrents.php?source27=1">&nbsp;GameCube</a></li><li><a href="torrents.php?source28=1">&nbsp;DS</a></li><li><a href="torrents.php?source29=1">&nbsp;3DS</a></li><li><a href="torrents.php?source30=1">&nbsp;Wii/WiiU</a></li></ul></li><li><a>&nbsp;Sony</a><ul><li><a href="torrents.php?source31=1">&nbsp;PS4</a></li><li><a href="torrents.php?source32=1">&nbsp;PS/PSone</a></li><li><a href="torrents.php?source33=1">&nbsp;PS2</a></li><li><a href="torrents.php?source34=1">&nbsp;PSP</a></li><li><a href="torrents.php?source35=1">&nbsp;PS3</a></li><li><a href="torrents.php?source56=1">&nbsp;PS5</a></li><li><a href="torrents.php?source36=1">&nbsp;PS Vita</a></li></ul></li><li><a>&nbsp;Apple</a><ul><li><a href="torrents.php?source37=1">&nbsp;MAC</a></li><li><a href="torrents.php?source38=1">&nbsp;iOS</a></li></ul></li><li><a>&nbsp;Arcade</a><ul><li><a href="torrents.php?source39=1">&nbsp;FinalBurn</a></li><li><a href="torrents.php?source40=1">&nbsp;Kawaks</a></li><li><a href="torrents.php?source41=1">&nbsp;MAME</a></li><li><a href="torrents.php?source42=1">&nbsp;Nebula</a></li><li><a href="torrents.php?source43=1">&nbsp;RetroArch</a></li></ul></li><li><a>&nbsp;Bandi</a><ul><li><a href="torrents.php?source44=1">&nbsp;WanderSwan</a></li></ul></li><li><a>&nbsp;Google</a><ul><li><a href="torrents.php?source45=1">&nbsp;Android</a></li></ul></li><li><a>&nbsp;Linux</a><ul><li><a href="torrents.php?source46=1">&nbsp;Linux</a></li></ul></li><li><a>&nbsp;NEC</a><ul><li><a href="torrents.php?source47=1">&nbsp;PC-E</a></li></ul></li><li><a>&nbsp;Sega</a><ul><li><a href="torrents.php?source48=1">&nbsp;Master System</a></li><li><a href="torrents.php?source49=1">&nbsp;Mega Drive</a></li><li><a href="torrents.php?source50=1">&nbsp;Game Gear</a></li><li><a href="torrents.php?source51=1">&nbsp;Saturn</a></li><li><a href="torrents.php?source52=1">&nbsp;DreamCast</a></li></ul></li><li><a>&nbsp;SNC</a><ul><li><a href="torrents.php?source53=1">&nbsp;NeoGeo</a></li><li><a href="torrents.php?source54=1">&nbsp;NGP/NGPC</a></li></ul></li><li><a>&nbsp;Other</a><ul><li><a href="torrents.php?source57=1">&nbsp;Oculus Quest 2</a></li><li><a href="torrents.php?source55=1">&nbsp;Other</a></li></ul></li></ul></li><li><a href="https://wiki.pterclub.com/wiki/%E6%B8%B8%E6%88%8F%E5%8C%BA%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97">&nbsp;&nbsp;&nbsp;指&nbsp;&nbsp;南&nbsp;</a></li><li><a href="https://wiki.pterclub.com/wiki/%E6%B8%B8%E6%88%8F%E5%8C%BA%E6%89%8B%E6%8A%8A%E6%89%8B%E5%8F%91%E7%A7%8D%E6%95%99%E7%A8%8B">&nbsp;发种教程&nbsp;</a></li><li><a href="searchgameinfo.php">&nbsp;查询游戏&nbsp;</a></li><li><a href="uploadgameinfo.php">&nbsp;添加游戏&nbsp;</a></li><li><a href="torrents.php?tag_sce=yes">&nbsp;&nbsp;Scene</a></li><li><a href="torrents.php?tag_vs=yes">&nbsp;可 信 源</a></li><li><a href="torrents.php?tag_gg=yes">GalGame</a></li></ul><li><a href="officialgroup.php?tag_internal=yes&t&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0" rel="ddsubmenu1">&nbsp;官&nbsp;&nbsp;方&nbsp;</a></li><ul id="ddsubmenu1" class="ddsubmenustyle"><li><a href="officialgroup.php?tag_internal=yes&t&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0" rel="ddsubmenu1">&nbsp;&nbsp;&nbsp;所&nbsp;&nbsp;有</a><li><a href="officialgroup.php?tag_internal=yes&source6=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;压&nbsp;&nbsp;制</a></li><li><a href="officialgroup.php?tag_internal=yes&source5=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;网&nbsp;&nbsp;络</a></li><li><a href="officialgroup.php?tag_internal=yes&tag_doityourself=yes&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;D&nbsp;I&nbsp;Y</a></li><li><a href="officialgroup.php?tag_internal=yes&search=Remux">&nbsp;&nbsp;Remux</a></li><li><a href="officialgroup.php?tag_internal=yes&source4=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;录&nbsp;&nbsp;制</a></li><li><a href="officialgroup.php?tag_internal=yes&cat409=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;游&nbsp;&nbsp;戏</a></li><li><a href="officialgroup.php?tag_internal=yes&cat413=1&incldead=1&spstate=0&inclbookmarked=0&search=&search_area=0&search_mode=0">&nbsp;&nbsp;&nbsp;Ｍ&nbsp;&nbsp;Ｖ</a></li><li><a href="welfare.php">&nbsp;每周福利</a></li></ul><li><a href="viewrequests.php">&nbsp;求&nbsp;&nbsp;种&nbsp;</a></li><li><a href="reseed.php?tag_internal=yes">&nbsp;保&nbsp;&nbsp;种&nbsp;</a></li><li><a href="offers.php">&nbsp;候&nbsp;&nbsp;选&nbsp;</a></li><li><a href="upload.php" rel="ddsubmenu1">&nbsp;发&nbsp;&nbsp;布&nbsp;</a></li><ul id="ddsubmenu1" class="ddsubmenustyle"><li><a href="upload.php" rel="ddsubmenu1">&nbsp;&nbsp;&nbsp;所&nbsp;&nbsp;有</a><li><a href="subtitles.php">&nbsp;&nbsp;&nbsp;字&nbsp;&nbsp;幕</a></li><li><a href="postpreview.php" target="_blank">&nbsp;&nbsp;&nbsp;预&nbsp;&nbsp;览</a></li></ul><li><a href="blackjack.php" rel="ddsubmenu1">&nbsp;娱&nbsp;&nbsp;乐&nbsp;</a></li><ul id="ddsubmenu1" class="ddsubmenustyle"><li><a href="blackjack.php">&nbsp;２&nbsp;１&nbsp;点&nbsp;</a></li><li><a href="wof.php" target="_blank">&nbsp;大&nbsp;转&nbsp;盘</a></li><li><a href="slot/index.html?slot-202406292233" target="_blank">&nbsp;摇&nbsp;摇&nbsp;乐</a></li><li><a href="lottery.php">&nbsp;刮&nbsp;刮&nbsp;乐</a></li><li><a href="medal.php">&nbsp;徽章换领</a></li><li><a href="showmedal.php">&nbsp;徽章陈列</a></li><li><a href="medalbillboard.php">&nbsp;徽章排行</a></li></ul><li><a href="usercp.php">&nbsp;控制面板&nbsp;</a></li><li><a href="topten.php" rel="ddsubmenu1">排&nbsp;行&nbsp;榜</a></li><ul id="ddsubmenu1" class="ddsubmenustyle"><li><a href="topten.php" rel="ddsubmenu1">&nbsp;&nbsp;&nbsp;所&nbsp;&nbsp;有</a><li><a href="log.php">&nbsp;&nbsp;&nbsp;日&nbsp;&nbsp;志</a></li></ul><li><a href='javascript:void(0)' rel='ddsubmenu1'>帮&nbsp;助</a></li><ul id="ddsubmenu1" class="ddsubmenustyle" style='text-align: center;'><li><a href='https://wiki.pterclub.com/wiki/%E9%A6%96%E9%A1%B5#.E8.A7.84.E5.88.99' target='_blank'>规则</a></li><li><a href='https://wiki.pterclub.com/wiki/%E9%A6%96%E9%A1%B5#.E5.B8.B8.E8.A7.81.E9.97.AE.E9.A2.98' target='_blank'>常见问题</a></li><li><a href='https://wiki.pterclub.com' target='_blank'>Wiki</a></li><li><a href='contactstaff.php'>管理组</a></li></ul></ul></div></td></tr></table>
+
+<table id="info_block" cellpadding="4" cellspacing="0" border="0" width="100%"><tr>
+  <td><table width="100%" cellspacing="0" cellpadding="0" border="0"><tr>
+    <td class="bottom" align="left">
+		<span class="medium">欢迎回来, <span class="nowrap"><a  href="userdetails.php?id=9565" class='VIP_Name'><b>XiaoDai</b></a><img class="star" src="pic/trans.gif" alt="Donor" style='margin-left: 2pt' /> <span title="2FA" ><a href="https://wiki.pterclub.com/wiki/2FA" target="_blank">🔐</a></span></span>			[<a href="#" data-url="logout.php" id="logout-confirm">退出</a>]
+									[<a href="torrents.php?inclbookmarked=1&amp;allsec=1&amp;incldead=0">收藏</a>]
+			[<a href="viewclaims.php">已认领种子</a>]
+			<!-- [<a href="myrss.php">RSS 下载筐</a>] -->
+            <a title="点击查看每小时收益预测" href="mybonus.php#bonus-sum">
+                <span class="color_bonus">猫粮 </span>
+            </a>
+			[<a href="mybonus.php">使用</a> | <a href="sitefreepool.php">站免池</a>]: 381,623.3<span id="attendance-wrap"> <a href="#" data-url="attendance-ajax.php" id="do-attendance" class="faqlink">签到得猫粮</a> </span> <font class="color_invite">邀请 </font>
+		[<a href="invite.php?id=9565">发送</a>]:
+		12/0<br />
+
+		<font class="color_ratio">分享率：</font> 7.571		<font class='color_uploaded'>上传量：</font>
+		18.462 TB<font class='color_downloaded'>
+			下载量：</font> 2.438 TB		<span class="color_bonus">做种积分：</span> 2,576,357.4		<font class='color_active'>当前活动：</font>
+		<a href="getusertorrentlist.php?userid=9565&type=seeding">
+			<img class="arrowup" alt="Torrents seeding" title="当前做种" src="pic/trans.gif" />
+			17</a>
+		<a href="getusertorrentlist.php?userid=9565&type=leeching">
+			<img class="arrowdown" alt="Torrents leeching" title="当前下载" src="pic/trans.gif" />
+            0</a>
+    </td>
+
+  <td class="bottom" align="right">
+<div id="lang-selector">
+
+        
+          <img src="/pic/flag/china.gif" height="10" width="16" alt="简体中文" title="简体中文" />&nbsp;
+        
+        <a href="?sitelanguage=28">  <img src="/pic/flag/hong_kong.gif" height="10" width="16" alt="轉為繁體中文" title="轉為繁體中文"/>&nbsp;
+        </a>
+        <a href="?sitelanguage=6">  <img src="/pic/flag/uk.gif" height="10" width="16" alt="Switch to English" title="Switch to English" />&nbsp;
+        </a>
+    <span class="medium">
+		    </span>
+</div>
+	  <span class="medium">
+        <a href="messages.php"><img class="inbox" src="pic/trans.gif" alt="inbox" title="收件箱&nbsp;(无新短讯)" /></a> 22 (0 新)  <a href="messages.php?action=viewmailbox&amp;box=-1"><img class="sentbox" alt="sentbox" title="发件箱" src="pic/trans.gif" /></a> 4 <a href="friends.php"><img class="buddylist" alt="Buddylist" title="社交名单" src="pic/trans.gif" /></a> <a href="getrss.php"><img class="rss" alt="RSS" title="获取RSS" src="pic/trans.gif" /></a> <a href="contactstaff.php"><img alt="ContactStaff" title="给管理组发短讯" src="storage/uploadpicz/misc/contactstaff.png" /></a>
+    </span></td>
+    </tr></table></td>
+</tr></table>
+
+</td></tr>
+
+<tr><td id="outer" align="center" class="outer">
+        <div style='display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;'></div><div align="center"><a href="forums.php?action=viewtopic&forumid=1&topicid=61" target=_blank><b><font color="#8000ff" size="4">【2025进行中】人才招募</font></a></b></div><br><table width="940" class="main" border="0" cellspacing="0" cellpadding="0"><tr><td class="embedded">    <form method="get" name="searchbox" action="?">
+        <table border="1" class="searchbox" cellspacing="0" cellpadding="5" width="820px" align="center">
+    <tbody>
+      <tr>
+        <td class="colhead" align="center" colspan="2">
+          <a href="javascript: klappe_news('searchboxmain')">
+            <img class="plus" src="pic/trans.gif" id="picsearchboxmain" alt="Show/Hide" />
+            搜索箱          </a>
+        </td>
+      </tr>
+    </tbody>
+    <tbody id="ksearchboxmain" style="display: none">
+        <tr>
+            <td class="rowfollow" align="left">
+                <table>
+                  <tr><td class="embedded" colspan="7" align="left"><b>类型:</b></td></tr><tr><td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat401" name="cat401" value="1" /><a href="/torrents.php?cat=401"><img class="c_movies" src="pic/cattrans.gif" alt="电影 (Movie)" title="电影 (Movie)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat404" name="cat404" value="1" /><a href="/torrents.php?cat=404"><img class="c_tvseries" src="pic/cattrans.gif" alt="电视剧 (TV Series)" title="电视剧 (TV Series)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat403" name="cat403" value="1" /><a href="/torrents.php?cat=403"><img class="c_anime" src="pic/cattrans.gif" alt="动画 (Animation)" title="动画 (Animation)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat405" name="cat405" value="1" /><a href="/torrents.php?cat=405"><img class="c_tvshows" src="pic/cattrans.gif" alt="综艺 (TV Show)" title="综艺 (TV Show)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat413" name="cat413" value="1" /><a href="/torrents.php?cat=413"><img class="c_mv" src="pic/cattrans.gif" alt="音乐短片 (MV)" title="音乐短片 (MV)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat406" name="cat406" value="1" /><a href="/torrents.php?cat=406"><img class="c_music" src="pic/cattrans.gif" alt="音乐 (Music)" title="音乐 (Music)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat418" name="cat418" value="1" /><a href="/torrents.php?cat=418"><img class="c_stage" src="pic/cattrans.gif" alt="舞台演出(Stage Performance)" title="舞台演出(Stage Performance)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+</tr><tr><td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat402" name="cat402" value="1" /><a href="/torrents.php?cat=402"><img class="c_doc" src="pic/cattrans.gif" alt="纪录片 (Documentary)" title="纪录片 (Documentary)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat407" name="cat407" value="1" /><a href="/torrents.php?cat=407"><img class="c_sports" src="pic/cattrans.gif" alt="体育 (Sport)" title="体育 (Sport)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat408" name="cat408" value="1" /><a href="/torrents.php?cat=408"><img class="c_ebook" src="pic/cattrans.gif" alt="电子书 (Ebook)" title="电子书 (Ebook)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat409" name="cat409" value="1" /><a href="/torrents.php?cat=409"><img class="c_game" src="pic/cattrans.gif" alt="游戏 (Game)" title="游戏 (Game)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat410" name="cat410" value="1" /><a href="/torrents.php?cat=410"><img class="c_software" src="pic/cattrans.gif" alt="软件 (Software)" title="软件 (Software)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat411" name="cat411" value="1" /><a href="/torrents.php?cat=411"><img class="c_study" src="pic/cattrans.gif" alt="学习 (Study)" title="学习 (Study)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="cat412" name="cat412" value="1" /><a href="/torrents.php?cat=412"><img class="c_misc" src="pic/cattrans.gif" alt="其它 (Other)" title="其它 (Other)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a></td>
+<td colspan="2" class="bottom" align="left" style="padding-left: 15px"><input name="cat_check" value='全选' class="btn medium" type="button" onclick="javascript:SetChecked('cat','cat_check','全选','全不选',-1,10)" /></td>
+</tr><tr><td class="embedded" colspan="7" align="left"><b>质量:</b></td></tr><tr><td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source1" name="source1" value="1" /><a title="UHD Discs" href="/torrents.php?source=1">UHD Discs</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source2" name="source2" value="1" /><a title="BD Discs" href="/torrents.php?source=2">BD Discs</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source3" name="source3" value="1" /><a title="Remux" href="/torrents.php?source=3">Remux</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source4" name="source4" value="1" /><a title="HDTV" href="/torrents.php?source=4">HDTV</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source5" name="source5" value="1" /><a title="WEB-DL" href="/torrents.php?source=5">WEB-DL</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source6" name="source6" value="1" /><a title="Encode" href="/torrents.php?source=6">Encode</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source7" name="source7" value="1" /><a title="DVD Discs" href="/torrents.php?source=7">DVD Discs</a></td>
+</tr><tr><td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source8" name="source8" value="1" /><a title="FLAC" href="/torrents.php?source=8">FLAC</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source9" name="source9" value="1" /><a title="WAV" href="/torrents.php?source=9">WAV</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source10" name="source10" value="1" /><a title="ISO" href="/torrents.php?source=10">ISO</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source11" name="source11" value="1" /><a title="PDF" href="/torrents.php?source=11">PDF</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source12" name="source12" value="1" /><a title="PUB" href="/torrents.php?source=12">PUB</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source13" name="source13" value="1" /><a title="AZW" href="/torrents.php?source=13">AZW</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source14" name="source14" value="1" /><a title="MOBI" href="/torrents.php?source=14">MOBI</a></td>
+</tr><tr><td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="source15" name="source15" value="1" /><a title="Other" href="/torrents.php?source=15">Other</a></td>
+<td colspan="2" class="bottom" align="left" style="padding-left: 15px"><input name="source_check" value='全选' class="btn medium" type="button" onclick="javascript:SetChecked('source','source_check','全选','全不选',-1,10)" /></td>
+</tr><tr><td class="embedded" colspan="7" align="left"><b>地区:</b></td></tr><tr><td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="team1" name="team1" value="1" /><a title="大陆 (Mainland,CHN)" href="/torrents.php?team=1">大陆 (Mainland,CHN)</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="team2" name="team2" value="1" /><a title="香港 (HKG,CHN)" href="/torrents.php?team=2">香港 (HKG,CHN)</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="team3" name="team3" value="1" /><a title="台湾 (TWN,CHN)" href="/torrents.php?team=3">台湾 (TWN,CHN)</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="team4" name="team4" value="1" /><a title="欧美 (Western)" href="/torrents.php?team=4">欧美 (Western)</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="team5" name="team5" value="1" /><a title="韩国 (KOR)" href="/torrents.php?team=5">韩国 (KOR)</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="team6" name="team6" value="1" /><a title="日本 (JPN)" href="/torrents.php?team=6">日本 (JPN)</a></td>
+<td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="team7" name="team7" value="1" /><a title="印度 (IND)" href="/torrents.php?team=7">印度 (IND)</a></td>
+</tr><tr><td align="left" class="bottom" style="padding-bottom: 4px; padding-left: 3px;">
+<input type="checkbox" id="team8" name="team8" value="1" /><a title="其它 (Other)" href="/torrents.php?team=8">其它 (Other)</a></td>
+<td colspan="2" class="bottom" align="left" style="padding-left: 15px"><input name="team_check" value='全选' class="btn medium" type="button" onclick="javascript:SetChecked('team','team_check','全选','全不选',-1,10)" /></td>
+</tr>                    <div>
+                        <!--   标签:-->
+                        <b>标签:</b>
+                        <div style="margin: 4px 10px;">
+                            <div>
+                                <select class="med" name="tag_exclusive" style="width: 40px;">
+                                    <option value=""  selected="selected">&nbsp;-</option>
+                                    <option value="yes" >是</option>
+                                    <option value="no" >非</option>
+                                </select>
+                                <a href="/torrents.php?tag_exclusive=yes" class="sb-tag chs_tag-jz">禁转</a>                                <select class="med" name="tag_internal" style="width: 40px;">
+                                    <option value=""  selected="selected">&nbsp;-</option>
+                                    <option value="yes" >是</option>
+                                    <option value="no" >非</option>
+                                </select>
+                                <a href="/torrents.php?tag_internal=yes" class="sb-tag chs_tag-gf">官方</a>                                <select class="med" name="tag_mandarin" style="width: 40px;">
+                                    <option value=""  selected="selected">&nbsp;-</option>
+                                    <option value="yes" >是</option>
+                                    <option value="no" >非</option>
+                                </select>
+                                <a href="/torrents.php?tag_mandarin=yes" class="sb-tag chs_tag-gy">国语</a>                                <select class="med" name="tag_cantonese" style="width: 40px;">
+                                    <option value=""  selected="selected">&nbsp;-</option>
+                                    <option value="yes" >是</option>
+                                    <option value="no" >非</option>
+                                </select>
+                                <a href="/torrents.php?tag_cantonese=yes" class="sb-tag chs_tag-yy">粤语</a>                                <select class="med" name="tag_doityourself" style="width: 40px;">
+                                    <option value=""  selected="selected">&nbsp;-</option>
+                                    <option value="yes" >是</option>
+                                    <option value="no" >非</option>
+                                </select>
+                                <a href="/torrents.php?tag_doityourself=yes" class="sb-tag chs_tag-diy">DIY原盘</a>                                <select class="med" name="tag_master" style="width: 40px;">
+                                    <option value=""  selected="selected">&nbsp;-</option>
+                                    <option value="yes" >是</option>
+                                    <option value="no" >非</option>
+                                </select>
+                                <a href="/torrents.php?tag_master=yes" class="sb-tag chs_tag-mp">MV母盘</a>                            </div>
+                            <div style="display: inline-flex; flex-wrap: wrap; margin-top: 4px;">
+                                <div>
+                                    <input type="checkbox"  name="tag_chinesesub" value="yes" />
+                                    <a href="/torrents.php?tag_chinesesub=yes" class="sb-tag chs_tag-sub">中字</a>                                </div>
+                                <div>
+                                    <input type="checkbox"  name="tag_englishsub" value="yes" />
+                                    <a href="/torrents.php?tag_englishsub=yes" class="sb-tag chs_tag-ensub">英字</a>                                </div>
+                                <div>
+                                    <input type="checkbox"  name="tag_fillrequest" value="yes" />
+                                    <a href="/torrents.php?tag_fillrequest=yes" class="sb-tag chs_tag-yq">应求</a>                                </div>
+                                <div>
+                                    <input type="checkbox"  name="tag_buyitmyself" value="yes" />
+                                    <a href="/torrents.php?tag_buyitmyself=yes" class="sb-tag chs_tag-bim">自购</a>                                </div>
+                                <div>
+                                    <input type="checkbox"  name="tag_personalrip" value="yes" />
+                                    <a href="/torrents.php?tag_personalrip=yes" class="sb-tag chs_tag-pr">原创</a>                                </div>
+                                <div>
+                                    <input type="checkbox"  name="tag_gg" value="yes" />
+                                    <a href="/torrents.php?tag_gg=yes" class="sb-tag chs_tag-gg">GAL</a>                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </table>
+            </td>
+
+            <td class="rowfollow" valign="middle">
+                <table>
+                    <tr>
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <font class="medium">显示断种/活种？</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- 显示断种/活种 -->
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <select class="med" name="incldead" style="width: 100px;">
+                                <option value="0">包括断种</option>
+                                <option value="1"  selected="selected">活种 </option>
+                                <option value="2" >断种</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <font class="medium">显示促销种子？</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- 促销 -->
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <select class="med" name="spstate" style="width: 100px;">
+                                <option value="0">全部</option>
+                                <option value="1">普通</option><option value="2">免费</option><option value="3">2X</option><option value="4">2X免费</option><option value="5">50%</option><option value="6">2X 50%</option><option value="7">30%</option>                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <font class="medium">显示收藏？</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- 显示收藏？ -->
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <select class="med" name="inclbookmarked" style="width: 100px;">
+                                <option value="0">全部</option>
+                                <option value="1" >
+                                    仅收藏</option>
+                                <option value="2" >
+                                    仅未收藏</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <font class="medium">审核状态？</font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- 审核状态？ -->
+                        <td class="bottom" style="padding: 1px;padding-left: 10px">
+                            <select class="med" name="check" style="width: 100px;">
+                                <option value="">全部</option>
+                                <option value="unchecked" >
+                                    未处理</option>
+                                <option value="prechecked" >
+                                    已初审</option>
+                                <option value="checked" >
+                                    已审核</option>
+                                <option value="need_edit" >
+                                    待修改</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                                    </table>
+            </td>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td class="rowfollow" align="center">
+                <table>
+                    <tr>
+                        <td class="embedded">
+                            搜索关键字:&nbsp;&nbsp;
+                        </td>
+                        <td class="embedded">
+                            <table>
+                                <tr>
+                                    <td class="embedded">
+                                        <input id="searchinput" name="search" type="text" value="口之法则" autocomplete="off" style="width: 200px" ondblclick="suggest(event.keyCode,this.value);" onkeyup="suggest(event.keyCode,this.value);" onkeypress="return noenter(event.keyCode);" />
+                                        <script src="suggest.js" type="text/javascript"></script>
+                                        <div id="suggcontainer" style="text-align: left; width:100px;  display: none;">
+                                            <div id="suggestions" style="width:204px; border: 1px solid rgb(119, 119, 119); cursor: default; position: absolute; color: rgb(0,0,0); background-color: rgb(255, 255, 255);"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="embedded">
+                            &nbsp; 范围：
+                            <select name="search_area">
+                                <option value="0">标题</option>
+                                                                <option value="2" >主标题</option>
+                                <option value="3" >发布者</option>
+                                <option value="4" >IMDb链接</option>
+                                <option value="5" >Douban ID</option>
+                            </select>
+
+                             匹配模式：
+                            <select name="search_mode" style="width: 60px;">
+                                <option value="0">与</option>
+                                <option value="1" >或</option>
+                                <option value="2" >部分</option>
+                                <option value="3" >准确</option>
+                                <option value="4" >结尾</option>
+                            </select>
+
+                                                    </td>
+                    </tr>
+                    <tr><td class="embedded" colspan="3">&nbsp;&nbsp;<a href="?search=LikeArt&amp;notnewword=1"><u>LikeArt</u></a>&nbsp;&nbsp;<a href="?search=Remux&amp;notnewword=1"><u>Remux</u></a>&nbsp;&nbsp;<a href="?search=%E5%8F%8C%E5%BD%B1%E5%A5%87%E5%A2%83&amp;notnewword=1"><u>双影奇境</u></a>&nbsp;&nbsp;<a href="?search=%E9%9A%BE%E5%93%84&amp;notnewword=1"><u>难哄</u></a>&nbsp;&nbsp;<a href="?search=%E7%BE%8E%E5%9B%BD%E9%98%9F%E9%95%BF&amp;notnewword=1"><u>美国队长</u></a>&nbsp;&nbsp;<a href="?search=%E7%BE%8E%E5%9B%BD%E9%98%9F%E9%95%BF4&amp;notnewword=1"><u>美国队长4</u></a>&nbsp;&nbsp;<a href="?search=%E5%96%84%E6%84%8F%E7%9A%84%E7%AB%9E%E4%BA%89&amp;notnewword=1"><u>善意的竞争</u></a>&nbsp;&nbsp;<a href="?search=%E4%BA%BA%E7%94%9F%E5%88%87%E5%89%B2%E6%9C%AF&amp;notnewword=1"><u>人生切割术</u></a>&nbsp;&nbsp;<a href="?search=%E5%88%9D%E6%AD%A5%E4%B8%BE%E8%AF%81&amp;notnewword=1"><u>初步举证</u></a>&nbsp;&nbsp;<a href="?search=%E6%B2%A7%E5%85%83%E5%9B%BE&amp;notnewword=1"><u>沧元图</u></a>&nbsp;&nbsp;<a href="?search=%E5%93%AA%E5%90%92&amp;notnewword=1"><u>哪吒</u></a>&nbsp;&nbsp;</td></tr>                </table>
+            </td>
+            <td class="rowfollow" align="center">
+                <input type="submit" class="btn" value="给我搜" />
+            </td>
+        </tr>
+    </tbody>
+  </table>
+    </form>
+    <!-- 合作小组按钮-->
+    <p align="center">
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-AdBlue&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;AdBlue&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-AREY&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;AREY&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-BdC&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;BdC&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-BMDru&search_area=2&search_mode=4" target="_self">
+                <font color='gray'>&nbsp;&nbsp;BMDru&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-CatEDU+-CatMAG&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;CatEDU&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-c0kE&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;c0kE&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-doraemon&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;doraemon&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-JKCT&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;JKCT&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-KMX&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;KMX&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-Lislander&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;Lislander&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-RO&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;RO&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-Telesto&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;Telesto&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-XPcl+-XPcl@PTer&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;XPcl&nbsp;&nbsp;</font>
+            </a></button>&nbsp;&nbsp;
+        <button class="layui-btn layui-btn-mini layui-btn-radius"><a href="?search=-ZTR&search_area=2&search_mode=4" target="_self">
+                <font color='white'>&nbsp;&nbsp;ZTR&nbsp;&nbsp;</font>
+            </a></button>
+    </p>
+    <p align="center">
+        <a href="?spstate=2" target="_self" title="查看免费种子"><strong class="free">免费</strong></a> |<a href="?spstate=3" target="_self" title="查看两倍上传量种子"><strong class="twoup">2x上传</strong></a> |<a href="?spstate=4" target="_self" title="查看免费且两倍上传种子"><strong class="twoupfree">免费&2x上传</strong></a> |<a href="?spstate=5" target="_self" title="查看50%下载种子"><strong class="halfdown">50%下载</strong></a> |<a href="?spstate=6" target="_self" title="查看50%下载且两倍上传种子"><strong class="twouphalfdown">50%下载&2x上传</strong></a> |<a href="?spstate=7" target="_self" title="查看30%下载种子"><strong class="thirtypercent">30%下载</strong></a>    </p>
+<p align="center" class="np-pager"><font class="gray"><b title="Alt+Pageup">&lt;&lt;&nbsp;上一页</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font class="gray"><b title="Alt+Pagedown">下一页&nbsp;&gt;&gt;</b></font><br /><font class="gray"><b>1&nbsp;-&nbsp;3</b></font></p>
+<table class="torrents" cellspacing="0" cellpadding="5" width="100%" id="torrenttable">
+<tr>
+    <td class="colhead" style="padding: 0px">类型</td>    <td class="colhead"><a href="?search=口之法则&amp;sort=1&amp;type=asc">标题</a></td>
+    <td class="colhead"><a href="?search=口之法则&amp;sort=3&amp;type=desc"><img class="comments" src="pic/trans.gif" alt="comments" title="评论数" /></a></td>
+    
+<td class="colhead"><a href="?search=口之法则&amp;sort=4&amp;type=desc"><img class="time" src="pic/trans.gif" alt="time" title="存活时间" /></a></td>
+<td class="colhead"><a href="?search=口之法则&amp;sort=5&amp;type=desc"><img class="size" src="pic/trans.gif" alt="size" title="大小" /></a></td>
+<td class="colhead"><a href="?search=口之法则&amp;sort=7&amp;type=desc"><img class="seeders" src="pic/trans.gif" alt="seeders" title="种子数" /></a></td>
+<td class="colhead"><a href="?search=口之法则&amp;sort=8&amp;type=desc"><img class="leechers" src="pic/trans.gif" alt="leechers" title="下载数" /></a></td>
+<td class="colhead"><a href="?search=口之法则&amp;sort=6&amp;type=desc"><img class="snatched" src="pic/trans.gif" alt="snatched" title="完成数" /></a></td>
+<!--<td class="colhead">进度</td>-->
+<td class="colhead"><a href="?search=口之法则&amp;sort=9&amp;type=desc">发布者</a></td>
+    </tr>
+    <tr>
+<td class="rowfollow nowrap" valign="middle" style='padding: 0px'><a href="?cat=404"><img class="c_tvseries" src="pic/cattrans.gif" alt="电视剧 (TV Series)" title="电视剧 (TV Series)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a><a href="?source5=1">
+            <img class="c_wd" src="pic/cattrans.gif"
+            style="background-image: url(pic/category/chd/scenetorrents/chs/additional/web.png);" alt="WEB-DL" title="WEB-DL" /><a class=third-icon href="?team8=1">
+        <img class="c_un" src="pic/cattrans.gif"
+        style="background-image: url(pic/category/chd/scenetorrents/chs/additional/UN.png);" alt="UN" title="UN" /></a></td>
+<td class="rowfollow" width="100%" align="left" style='padding: 0px'><table class="torrentname" width="100%"><tr><td class="embedded" style='width: 75px;text-align: center;'><img class="lozad" style="max-width: 71px; max-height: 46px; margin: 0 2px 0; vertical-align: bottom;"
+            onmouseover="trPreview(this);" onmouseout="trPreviewOut(this);" src="/pic/spinner.svg"
+            data-torrent="609341" data-src="//images.weserv.nl/?url=https://cache.springsunday.net/img9.doubanio.com/view/photo/l_ratio_poster/public/p2532985155.jpg&w=150&h=92&fit=inside" data-orig="https://cache.springsunday.net/img9.doubanio.com/view/photo/l_ratio_poster/public/p2532985155.jpg" alt="preview"  onerror="if (this.src != this.dataset.orig) { console.log('fallback: 609341 ' + this.src); this.src = this.dataset.orig;}"/></td><td class="embedded"><div style='padding: 2px;'><div>&nbsp;<a title="Mouth 2018 S01 Complete LiTV WEB-DL 1080p x264 AAC 2.0-CMCTV"  href="details.php?id=609341"><b>&nbsp;Mouth 2018 S01 Complete LiTV WEB-DL 1080p x264 AAC 2.0-CMCTV</b></a></div><div style='margin-top: 4px;'><a class="chs_tag chs_tag-sub torrents-tag" style="margin-left: 2px;" href="torrents.php?tag_chinesesub=yes">中字</a>&nbsp;<span>[Checked by zuoans] 口之法则 / 嘴（台） | 全18集 | 主演: 阿萍雅·萨库尔加伦苏 泽纶娅·秀利隆坤泽坤 友..</span></div></div></td><td class="embedded" width="6px"><div style="line-height: 16px"></div></td><td class="embedded" width="20px"><td class="embedded" style="padding-left: 0px;" width="20" valign="middle"><a href="download.php?id=609341&passkey=2124354e9ffc872a5ae110f46943a4eb"><img class="download" src="pic/trans.gif" style='padding-bottom: 2px;' alt="download" title="下载本种" /></a><div style='line-height: 16px;'><a href='torrents.php?check=checked'><img src='pic/checked.png' title='已通过审核' width='16px'></a></div></td><td class="embedded" style="padding-left: 0px;" width="20" valign="middle"><a id="rssmark0"  href="javascript: rssmark(609341,0);" ></a><a id="bookmark0"  href="javascript: bookmark(609341,0);" ><img class="delbookmark" src="pic/trans.gif" alt="Unbookmarked" title="收藏" /></a></td><td class="embedded" width="44px"><div style='display: flex; align-items: center;'><img src='pic/imdb.png' title='IMDb评分' /><span data-imdbid='' style='padding-left: 5px'><font color=gray>N/A</font></span></div><a href='/torrents.php?search=30312094&search_area=5' style='margin-top: 2px; display: flex; align-items: center;'><img src='pic/douban.png' title='豆瓣评分' /><span data-doubanid='30312094' style='padding-left: 5px'><font color=gray>N/A</font></span></a></td></tr></table></td><td class="rowfollow"><a href="comment.php?action=add&amp;pid=609341&amp;type=torrent" title="&amp;game=yes添加评论">0</a></td><td class="rowfollow nowrap"><span title="2025-03-05 06:00:45">3天<br />4时</span></td><td class="rowfollow">41.20<br />GB</td><td class="rowfollow" align="center"><b><a href="details.php?id=609341&amp;dllist=1#seeders">4</a></b></td>
+<td class="rowfollow">0</td>
+<td class="rowfollow"><a href="viewsnatches.php?id=609341"><b>7</b></a></td>
+<td class="rowfollow"><i>匿名</i></td>
+</tr>
+<tr>
+<td class="rowfollow nowrap" valign="middle" style='padding: 0px'><a href="?cat=404"><img class="c_tvseries" src="pic/cattrans.gif" alt="电视剧 (TV Series)" title="电视剧 (TV Series)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a><a href="?source5=1">
+            <img class="c_wd" src="pic/cattrans.gif"
+            style="background-image: url(pic/category/chd/scenetorrents/chs/additional/web.png);" alt="WEB-DL" title="WEB-DL" /><a class=third-icon href="?team8=1">
+        <img class="c_un" src="pic/cattrans.gif"
+        style="background-image: url(pic/category/chd/scenetorrents/chs/additional/UN.png);" alt="UN" title="UN" /></a></td>
+<td class="rowfollow" width="100%" align="left" style='padding: 0px'><table class="torrentname" width="100%"><tr><td class="embedded" style='width: 75px;text-align: center;'><img class="lozad" style="max-width: 71px; max-height: 46px; margin: 0 2px 0; vertical-align: bottom;"
+            onmouseover="trPreview(this);" onmouseout="trPreviewOut(this);" src="/pic/spinner.svg"
+            data-torrent="269297" data-src="//images.weserv.nl/?url=https://img2.doubanio.com/view/photo/l_ratio_poster/public/p2532985155.jpg&w=150&h=92&fit=inside" data-orig="https://img2.doubanio.com/view/photo/l_ratio_poster/public/p2532985155.jpg" alt="preview"  onerror="if (this.src != this.dataset.orig) { console.log('fallback: 269297 ' + this.src); this.src = this.dataset.orig;}"/></td><td class="embedded"><div style='padding: 2px;'><div>&nbsp;<a title="Pak S01 2018 1080p KKTV WEB-DL x264 AAC-ADWeb"  href="details.php?id=269297"><b>&nbsp;Pak S01 2018 1080p KKTV WEB-DL x264 AAC-ADWeb</b></a> <b>[<font class='hot'>热门</font>]</b></div><div style='margin-top: 4px;'><a class="chs_tag chs_tag-sub torrents-tag" style="margin-left: 2px;" href="torrents.php?tag_chinesesub=yes">中字</a>&nbsp;<span>口之法则 | 类型：剧情 爱情 完结打包</span></div></div></td><td class="embedded" width="6px"><div style="line-height: 16px"></div></td><td class="embedded" width="20px"><td class="embedded" style="padding-left: 0px;" width="20" valign="middle"><a href="download.php?id=269297&passkey=2124354e9ffc872a5ae110f46943a4eb"><img class="download" src="pic/trans.gif" style='padding-bottom: 2px;' alt="download" title="下载本种" /></a><div style='line-height: 16px;'><a href='torrents.php?check=checked'><img src='pic/checked.png' title='已通过审核' width='16px'></a></div></td><td class="embedded" style="padding-left: 0px;" width="20" valign="middle"><a id="rssmark1"  href="javascript: rssmark(269297,1);" ></a><a id="bookmark1"  href="javascript: bookmark(269297,1);" ><img class="delbookmark" src="pic/trans.gif" alt="Unbookmarked" title="收藏" /></a></td><td class="embedded" width="44px"><div style='display: flex; align-items: center;'><img src='pic/imdb.png' title='IMDb评分' /><span data-imdbid='' style='padding-left: 5px'><font color=gray>N/A</font></span></div><a href='/torrents.php?search=30312094&search_area=5' style='margin-top: 2px; display: flex; align-items: center;'><img src='pic/douban.png' title='豆瓣评分' /><span data-doubanid='30312094' style='padding-left: 5px'><font color=gray>N/A</font></span></a></td></tr></table></td><td class="rowfollow"><a href="comment.php?action=add&amp;pid=269297&amp;type=torrent" title="&amp;game=yes添加评论">0</a></td><td class="rowfollow nowrap"><span title="2022-11-07 19:01:29">2年<br />4月</span></td><td class="rowfollow">22.81<br />GB</td><td class="rowfollow" align="center"><b><a href="details.php?id=269297&amp;dllist=1#seeders">1</a></b></td>
+<td class="rowfollow">0</td>
+<td class="rowfollow"><a href="viewsnatches.php?id=269297"><b>41</b></a></td>
+<td class="rowfollow"><i>匿名</i></td>
+</tr>
+<tr>
+<td class="rowfollow nowrap" valign="middle" style='padding: 0px'><a href="?cat=404"><img class="c_tvseries" src="pic/cattrans.gif" alt="电视剧 (TV Series)" title="电视剧 (TV Series)" style="background-image: url(pic/category/chd/scenetorrents/chs/catsprites.png);" /></a><a href="?source5=1">
+            <img class="c_wd" src="pic/cattrans.gif"
+            style="background-image: url(pic/category/chd/scenetorrents/chs/additional/web.png);" alt="WEB-DL" title="WEB-DL" /><a class=third-icon href="?team8=1">
+        <img class="c_un" src="pic/cattrans.gif"
+        style="background-image: url(pic/category/chd/scenetorrents/chs/additional/UN.png);" alt="UN" title="UN" /></a></td>
+<td class="rowfollow" width="100%" align="left" style='padding: 0px'><table class="torrentname" width="100%"><tr><td class="embedded" style='width: 75px;text-align: center;'><img class="lozad" style="max-width: 71px; max-height: 46px; margin: 0 2px 0; vertical-align: bottom;"
+            onmouseover="trPreview(this);" onmouseout="trPreviewOut(this);" src="/pic/spinner.svg"
+            data-torrent="202295" data-src="//images.weserv.nl/?url=https://img9.doubanio.com/view/photo/l_ratio_poster/public/p2532985155.jpg&w=150&h=92&fit=inside" data-orig="https://img9.doubanio.com/view/photo/l_ratio_poster/public/p2532985155.jpg" alt="preview"  onerror="if (this.src != this.dataset.orig) { console.log('fallback: 202295 ' + this.src); this.src = this.dataset.orig;}"/></td><td class="embedded"><div style='padding: 2px;'><div>&nbsp;<a title="The laws of the mouth S01 2018 1080p WEB-DL H264 AAC-PTerWEB"  href="details.php?id=202295"><b>&nbsp;The laws of the mouth S01 2018 1080p WEB-DL H264 AAC-PTerWEB</b></a> <b>[<font class='hot'>热门</font>]</b> <a href="torrents.php?spstate=2" ><img class="pro_free" src="pic/trans.gif" alt="Free"  onmouseover="domTT_activate(this, event, 'content', '&lt;b&gt;&lt;font class=&quot;free&quot;&gt;免费&lt;/font&gt;&lt;/b&gt;剩余时间：&lt;b&gt;&lt;span title=&quot;2025-03-12 12:00:13&quot;&gt;4天1时&lt;/span&gt;&lt;/b&gt;', 'trail', false, 'delay',500,'lifetime',3000,'fade','both','styleClass','niceTitle', 'fadeMax',87, 'maxWidth', 300);" /></a>&nbsp;剩余时间：<b><span title="2025-03-12 12:00:13">4天1时</span></b></div><div style='margin-top: 4px;'><a class="chs_tag chs_tag-jz torrents-tag" style="margin-left: 2px;" href="torrents.php?tag_exclusive=yes">禁转</a><a class="chs_tag chs_tag-gf torrents-tag" style="margin-left: 2px;" href="torrents.php?tag_internal=yes">官方</a><a class="chs_tag chs_tag-sub torrents-tag" style="margin-left: 2px;" href="torrents.php?tag_chinesesub=yes">中字</a>&nbsp;<span>KKTV | 口之法则 | 全18集 | 主演： 阿萍雅·萨库尔加伦苏 / 泽纶娅·秀利隆坤泽坤 | [泰语繁体字幕]</span></div></div></td><td class="embedded" width="6px"><div style="line-height: 16px"></div></td><td class="embedded" width="20px"><td class="embedded" style="padding-left: 0px;" width="20" valign="middle"><a href="download.php?id=202295&passkey=2124354e9ffc872a5ae110f46943a4eb"><img class="download" src="pic/trans.gif" style='padding-bottom: 2px;' alt="download" title="下载本种" /></a><div style='line-height: 16px;'><a href='torrents.php?check=checked'><img src='pic/checked.png' title='已通过审核' width='16px'></a></div></td><td class="embedded" style="padding-left: 0px;" width="20" valign="middle"><a id="rssmark2"  href="javascript: rssmark(202295,2);" ></a><a id="bookmark2"  href="javascript: bookmark(202295,2);" ><img class="delbookmark" src="pic/trans.gif" alt="Unbookmarked" title="收藏" /></a></td><td class="embedded" width="44px"><div style='display: flex; align-items: center;'><img src='pic/imdb.png' title='IMDb评分' /><span data-imdbid='' style='padding-left: 5px'><font color=gray>N/A</font></span></div><a href='/torrents.php?search=30312094&search_area=5' style='margin-top: 2px; display: flex; align-items: center;'><img src='pic/douban.png' title='豆瓣评分' /><span data-doubanid='30312094' style='padding-left: 5px'><font color=gray>N/A</font></span></a></td></tr></table></td><td class="rowfollow"><a href="comment.php?action=add&amp;pid=202295&amp;type=torrent" title="&amp;game=yes添加评论">0</a></td><td class="rowfollow nowrap"><span title="2022-04-21 21:00:57">2年<br />11月</span></td><td class="rowfollow">22.61<br />GB</td><td class="rowfollow" align="center"><b><a href="details.php?id=202295&amp;dllist=1#seeders">3</a></b></td>
+<td class="rowfollow">0</td>
+<td class="rowfollow"><a href="viewsnatches.php?id=202295"><b>287</b></a></td>
+<td class="rowfollow"><i>匿名</i></td>
+</tr>
+</table><p align="center" class="np-pager"><font class="gray"><b>1&nbsp;-&nbsp;3</b></font><br /><font class="gray"><b title="Alt+Pageup">&lt;&lt;&nbsp;上一页</b></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font class="gray"><b title="Alt+Pagedown">下一页&nbsp;&gt;&gt;</b></font></p>
+</td></tr></table>
+</td></tr></table><div id="footer"><div style="margin-top: 10px; padding-bottom: 30px;" align="center"> (c)  <a href="/" target="_self">ＰＴ之友俱乐部</a> 2018-2025 Powered by <a href="aboutnxp.php">NexusPHP</a><br />[page created in <b> 26.555 </b> ms with <b>14</b> db queries, <b>31</b> reads and <b>5</b> writes of redis and <b>875.55 KB</b> ram]</div>
+<div style="display: none;" id="lightbox" class="lightbox"></div><div style="display: none;" id="curtain" class="curtain"></div><a id="faq-btn" href="javascript:void(0);" data-target="#faq-panel" onmouseover="faqToggle(this);"><img src="/pic/timemachine.png" alt="FAQ"></a><div id="faq-panel" style="display: none; background-color:#fdeac0;" data-target="#faq-panel" onmouseleave="faqToggle(this);"><p align="center"><h1><font color=red><center>F.A.Q.</center></font></h1></p>
+    <h3><font color=blue>新人必看</font></h3>
+    <a href="https://wiki.pterclub.com/" target="_blank">● 猫站规则</a><a href="https://wiki.pterclub.com/wiki/%E9%A6%96%E9%A1%B5#.E5.B8.B8.E8.A7.81.E9.97.AE.E9.A2.98" target="_blank">● 常见问题</a><br>
+    <a href="forums.php?action=viewtopic&topicid=375&page=p2128" target="_blank">● 禁发资源</a><a href="forums.php?action=viewtopic&forumid=2&topicid=675" target="_blank">● 新人报到</a><br>
+    <a href="forums.php?action=viewtopic&forumid=2&topicid=3" target="_blank">● 新手入门</a><a href="forums.php?action=viewtopic&forumid=1&topicid=53" target="_blank">● 命名规范</a><br>
+    <a href="forums.php?action=viewtopic&forumid=2&topicid=1348" target="_blank">● 转发教程</a><a title="盒子/多IP备案" href="forums.php?action=viewtopic&forumid=2&topicid=32" target="_blank">● 盒子/多IP备案</a><br>
+    <br>
+    <h3><font color=blue>特别奖励</font></h3>
+    <a href="forums.php?action=viewtopic&forumid=2&topicid=253" target="_blank">● 分享海报</a><a href="forums.php?action=viewtopic&forumid=21&topicid=1795" target="_blank">● MV发种奖励</a><br>
+    <a href="forums.php?action=viewtopic&forumid=21&topicid=2566" target="_blank">● 电影接力</a><a title="华语MV发种奖励" href="forums.php?action=viewtopic&forumid=21&topicid=1797" target="_blank">● 华语MV发种奖励</a><br>
+    <a href="forums.php?action=viewtopic&forumid=21&topicid=2742" target="_blank">● 猫粮放送</a><a href="forums.php?action=viewtopic&topicid=9189" target="_blank">● 四月影视专题</a><br>
+    <br>
+    <h3><font color=blue>特色功能</font></h3>
+    <a href="medal.php" target="_blank">● 特色徽章</a><a href="wof.php" target="_blank">● 大 转 盘</a><br>
+    <a href="usercp.php?action=tracker" target="_blank">● 显示隐藏</a><a href="lottery.php" target="_blank">● 刮 刮 乐</a><br>
+    <a href="tags.php" target="_blank">● 猫站BBCode</a><br></div>
+<script type="text/javascript">
+//<![CDATA[
+var maxpage=0;
+var currentpage=0;
+//]]>
+</script>
+</div>
+    <script>
+        (function($) {
+            $(function(){
+                //logout
+                $('#logout-confirm').click(function (e) {
+                    e.preventDefault();
+                    let logoutUrl = $(this).data("url");
+                    $.alert({
+                        title: '确认退出登录',
+                        boxWidth: '25%',
+                        useBootstrap: false,
+                        // icon: 'fa fa-question',
+                        theme: 'white',
+                        closeIcon: true,
+                        animation: 'scale',
+                        type: 'orange',
+                        buttons: {
+                            confirm: {
+                                text: '确定',
+                                btnClass: 'btn-orange',
+                                action: function (confirm) {
+                                    $.ajax({
+                                        url: logoutUrl,
+                                        dataType: 'json',
+                                        method: 'post'
+                                    }).done(function (response) {
+                                        location.href = response.url;
+                                    }).fail(function(){
+                                        alert('logout error');
+                                    });
+                                }
+                            },
+                            close: {
+                                text: '取消'
+                            }
+                        },
+                        content: "<p>真的要退出吗？</p>"
+                    });
+                });
+                //attendance
+                $('#do-attendance').click(function (e) {
+                    e.preventDefault();
+                    let url = $(this).data("url");
+                    $.alert({
+                        title: '签到',
+                        boxWidth: '25%',
+                        useBootstrap: false,
+                        // icon: 'fa fa-question',
+                        theme: 'white',
+                        closeIcon: true,
+                        animation: 'scale',
+                        type: 'orange',
+                        buttons: {
+                            close: {
+                                text: '关闭'
+                            }
+                        },
+                        content: function () {
+                            let self = this;
+                            self.setContent('...');
+                            return $.ajax({
+                                url: url,
+                                dataType: 'json',
+                                method: 'get'
+                            }).done(function (response) {
+                                if (response.status == '1') {
+                                    self.setTitle('签到成功');
+                                    self.setContent(response.message);
+                                    $('#attendance-wrap').html(response.data);
+                                } else {
+                                    self.setTitle(response.data);
+                                    self.setContent(response.message);
+                                }
+                            }).fail(function(){
+                                self.setContent('请求失败');
+                            });
+                        }
+                    });
+                });
+                //remove claim
+                $('body').delegate('.remove-confirm', 'click', function (e) {
+                    e.preventDefault();
+                    let removeUrl = $(this).data("url");
+                    $.alert({
+                        title: '取消认领',
+                        boxWidth: '25%',
+                        useBootstrap: false,
+                        // icon: 'fa fa-question',
+                        theme: 'white',
+                        closeIcon: true,
+                        animation: 'scale',
+                        type: 'orange',
+                        buttons: {
+                            confirm: {
+                                text: '确定',
+                                btnClass: 'btn-orange',
+                                action: function (confirm) {
+
+                                    // 套娃
+                                    $.alert({
+                                        title: '取消认领',
+                                        boxWidth: '25%',
+                                        useBootstrap: false,
+                                        // icon: 'fa fa-question',
+                                        theme: 'white',
+                                        closeIcon: true,
+                                        animation: 'scale',
+                                        type: 'orange',
+                                        buttons: {
+                                            close: {
+                                                text: '确定',
+                                            }
+                                        },
+                                        content: function() {
+                                            let self = this;
+                                            self.setContent('...');
+                                            return $.ajax({
+                                                url: removeUrl,
+                                                dataType: 'json',
+                                                method: 'get'
+                                            }).done(function (response) {
+                                                self.setTitle(response.title);
+                                                self.setContent(response.message);
+                                                setTimeout(function () {
+                                                    window.location.reload();
+                                                }, 1000);
+                                            }).fail(function () {
+                                                self.setContent('请求失败');
+                                            });
+                                        }
+                                    }); // end 套娃
+
+                                }
+                            },
+                            close: {
+                                text: '取消'
+                            }
+                        },
+                        content: "真的要取消认领这个种子吗？<br>取消认领将不会扣除猫粮，请确认！"
+                    });
+                });
+                //confirm claim
+                $('body').delegate('.claim-confirm', 'click', function (e) {
+                    e.preventDefault();
+                    let removeUrl = $(this).data("url");
+                    $.alert({
+                        title: '确认认领',
+                        boxWidth: '25%',
+                        useBootstrap: false,
+                        // icon: 'fa fa-question',
+                        theme: 'white',
+                        closeIcon: true,
+                        animation: 'scale',
+                        type: 'orange',
+                        buttons: {
+                            confirm: {
+                                text: '确定',
+                                btnClass: 'btn-orange',
+                                action: function (confirm) {
+
+                                    // 套娃
+                                    $.alert({
+                                        title: '确认认领',
+                                        boxWidth: '25%',
+                                        useBootstrap: false,
+                                        // icon: 'fa fa-question',
+                                        theme: 'white',
+                                        closeIcon: true,
+                                        animation: 'scale',
+                                        type: 'orange',
+                                        buttons: {
+                                            close: {
+                                                text: '确定',
+                                            }
+                                        },
+                                        content: function() {
+                                            let self = this;
+                                            self.setContent('...');
+                                            return $.ajax({
+                                                url: removeUrl,
+                                                dataType: 'json',
+                                                method: 'get'
+                                            }).done(function (response) {
+                                                self.setTitle(response.title);
+                                                self.setContent(response.message);
+                                                if (!response.not_reload) {
+                                                setTimeout(function () {
+                                                    window.location.reload();
+                                                }, 1000);
+                                                }
+                                            }).fail(function () {
+                                                self.setContent('请求失败');
+                                            });
+                                        }
+                                    }); // end 套娃
+
+                                }
+                            },
+                            close: {
+                                text: '取消'
+                            }
+                        },
+                        content: "确定要认领这个种子吗？"
+                    });
+                });
+            });
+        })(jQuery)
+    </script>
+
+    
+</body></html>
