@@ -8,7 +8,7 @@ on:
 
 env:
   # 请替换为您的 DockerHub 用户名/仓库名
-  DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/PT_Manage_Backend
+  DOCKER_IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/pt-manage-backend
 
 jobs:
   build-and-push:
