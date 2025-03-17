@@ -1,17 +1,21 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.api.v1.endpoints import auth, douyin, task, api_log, notification, user, pt_site
+from app.api.v1.endpoints import auth, douyin, task, api_log, notification, user, pt_site, health
 from app.core.config import settings
 from app.schemas.common import ApiResponse, ErrorCode
-from app.db.session import base_db
+from app.db.session import base_db, stop_pool_monitoring
 from app.db.base import Base
 from app.core.scheduler import init_scheduler, shutdown_scheduler
 from app.core.middleware import APILoggingMiddleware
+from app.core.logging_config import setup_logging
 from contextlib import asynccontextmanager
 import logging
 import os
+import sys
 
+# 初始化日志配置
+setup_logging(log_level=settings.log_level, log_dir=settings.LOG_DIR)
 logger = logging.getLogger(__name__)
 
 @asynccontextmanager
@@ -32,9 +36,16 @@ async def lifespan(app: FastAPI):
     yield
     # 关闭资源
     try:
+        # 关闭调度器
         await shutdown_scheduler()
+        
+        # 停止数据库连接池监控定时器
+        stop_pool_monitoring()
+        
+        # 关闭数据库连接
         if base_db.session_local:
             base_db.session_local().close()
+            
         logger.info("应用关闭：资源已释放")
     except Exception as e:
         logger.error(f"关闭资源时出错: {str(e)}", exc_info=True)
@@ -90,23 +101,25 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 # 注册认证路由
-app.include_router(auth.router, prefix="/v1", tags=["auth"])
+app.include_router(auth.router, prefix="/v1", tags=["认证"])
 
 # 注册用户路由
-app.include_router(user.router, prefix="/v1/user", tags=["user"])
+app.include_router(user.router, prefix="/v1/user", tags=["用户"])
 
 # 注册抖音相关路由
-app.include_router(douyin.router, prefix="/v1/douyin", tags=["douyin"])
+app.include_router(douyin.router, prefix="/v1/douyin", tags=["抖音"])
 
 # 注册任务路由
-app.include_router(task.router, prefix="/v1", tags=["task"])
+app.include_router(task.router, prefix="/v1", tags=["任务"])
 
 # 注册API日志路由
-app.include_router(api_log.router, prefix="/v1", tags=["api_log"])
+app.include_router(api_log.router, prefix="/v1", tags=["日志"])
 
 # 注册通知路由
-app.include_router(notification.router, prefix="/v1/notifications", tags=["notifications"])
+app.include_router(notification.router, prefix="/v1/notifications", tags=["通知"])
 
 # 注册PT站点路由
-app.include_router(pt_site.router, prefix="/v1/pt_site", tags=["pt_site"])
+app.include_router(pt_site.router, prefix="/v1/pt_site", tags=["PT站点"])
 
+# 添加健康检查路由
+app.include_router(health.router, prefix="/v1", tags=["系统"])

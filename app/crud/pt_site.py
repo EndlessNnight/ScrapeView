@@ -1,9 +1,11 @@
 from typing import List, Optional, Dict, Any, Union
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import or_
-from app.models.pt_site import Site, PTUser, ProxyImage
-from app.schemas.pt_site import SiteCreate, SiteUpdate, PTUserCreate, PTUserUpdate, ProxyImageCreate, ProxyImageUpdate
+from app.models.pt_site import Site, PTUser
+from app.schemas.pt_site import SiteCreate, SiteUpdate, PTUserCreate, PTUserUpdate
 from app.scripts.pt_site.schemas import PTUserInfo
+import json
+
 # 获取所有站点
 def get_sites(db: Session, user_id: int, skip: int = 0, limit: int = 100, include_user: bool = False) -> List[Site]:
     """获取指定用户的所有站点，可选择是否包含用户信息"""
@@ -47,6 +49,7 @@ def create_site(db: Session, site: SiteCreate, user_id: int = None, site_name: s
         "user_agent": site.user_agent,
         "api_key": site.api_key,
         "auth_token": site.auth_token,
+        "passkey": site.passkey,
         "user_id": user_id if user_id is not None else site.user_id
     }
     
@@ -209,52 +212,3 @@ def get_site_by_schema_type(db: Session, schema_type: str, user_id: int) -> Opti
         Site.schema_type == schema_type,
         Site.user_id == user_id
     ).first()
-
-# ProxyImage CRUD 操作
-
-def get_proxy_image_by_url(db: Session, original_url: str) -> Optional[ProxyImage]:
-    """根据原始URL获取代理图片"""
-    return db.query(ProxyImage).filter(ProxyImage.original_url == original_url).first()
-
-def get_proxy_image_by_id(db: Session, image_id: int) -> Optional[ProxyImage]:
-    """根据ID获取代理图片"""
-    return db.query(ProxyImage).filter(ProxyImage.id == image_id).first()
-
-def create_proxy_image(db: Session, image: ProxyImageCreate, local_path: str, file_name: str, 
-                      file_size: Optional[int] = None, mime_type: Optional[str] = None) -> ProxyImage:
-    """创建代理图片"""
-    db_image = ProxyImage(
-        original_url=image.original_url,
-        local_path=local_path,
-        file_name=file_name,
-        file_size=file_size,
-        mime_type=mime_type
-    )
-    db.add(db_image)
-    db.commit()
-    db.refresh(db_image)
-    return db_image
-
-def update_proxy_image(db: Session, image_id: int, image_update: ProxyImageUpdate) -> Optional[ProxyImage]:
-    """更新代理图片"""
-    db_image = get_proxy_image_by_id(db, image_id)
-    if not db_image:
-        return None
-    
-    update_data = image_update.dict(exclude_unset=True)
-    for key, value in update_data.items():
-        setattr(db_image, key, value)
-    
-    db.commit()
-    db.refresh(db_image)
-    return db_image
-
-def delete_proxy_image(db: Session, image_id: int) -> bool:
-    """删除代理图片"""
-    db_image = get_proxy_image_by_id(db, image_id)
-    if not db_image:
-        return False
-    
-    db.delete(db_image)
-    db.commit()
-    return True 

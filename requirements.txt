@@ -16,3 +16,5 @@ python-dotenv==1.0.0
 beautifulsoup4==4.12.3
 aiohttp==3.9.3
 cloudscraper==1.2.71
+lxml>=5.3.1
+psutil>=7.0.0

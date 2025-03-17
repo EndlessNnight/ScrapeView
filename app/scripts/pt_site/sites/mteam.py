@@ -1,22 +1,24 @@
 from ..base import BaseApiSite
-from ..schemas import TorrentInfo, TorrentDetails, SiteConfig, PTUserInfo, CategoryDetail, TorrentInfoList
+from ..schemas import TorrentInfo, TorrentDetails, SiteConfig, PTUserInfo, CategoryDetail, TorrentInfoList, ApiSiteConfig
 from .schemas.mteam.search import RequestModel, ResponseModel, RequestSearch
 from .schemas.mteam.detail import ResponseModel as DetailResponseModel
 from .schemas.mteam.profile import ResponseModel as UserInfoResponseModel
 from .schemas.mteam.myPeerStatus import ResponseModel as UserInfoPeerResponseModel
+from .schemas.mteam.torrentGenDlToken import TorrentGenDlTokenResponse, TorrentGenDlTokenRequest
 
 from typing import Dict, Any, List, Optional
 
 class MTeamSite(BaseApiSite):
     def __init__(self):
-        config = SiteConfig(
+        config = ApiSiteConfig(
             site_name="M-Team",
             base_url="https://api.m-team.io",
             torrents_url="/api/torrent/search",
             details_url="/api/torrent/detail",
             search_url="/api/torrent/search",
             user_info_url="/api/member/profile",
-            user_info_peer_url="/api/tracker/myPeerStatus"
+            user_info_peer_url="/api/tracker/myPeerStatus",
+            torrent_files_url="/api/torrent/genDlToken"
         )
         self.discount_table = {
             "PERCENT_50": "50%",
@@ -29,6 +31,7 @@ class MTeamSite(BaseApiSite):
         self.category_mapping = {
             1: CategoryDetail(id=1, name="电影", params="movie"),
             2: CategoryDetail(id=2, name="电视剧", params="tvshow"),
+            3: CategoryDetail(id=3, name="成人", params="adult"),
         }
         super().__init__(config)
         self._init_user_agent()
@@ -47,7 +50,7 @@ class MTeamSite(BaseApiSite):
         """设置API密钥"""
         self.api_key = api_key
         self.session.headers["x-api-key"] = self.api_key
-
+    
     def get_torrents(self, categories: List[str] = [], page: int = 1, page_size: int = 100, mode: str = "normal", visible: int = 1, keyword: str = None, cat_id: int = None)->TorrentInfoList:
         """获取种子列表
         
@@ -64,10 +67,13 @@ class MTeamSite(BaseApiSite):
         """
         if not self._is_login():
             raise Exception("未登录")
-
-        if cat_id:
-            if cat_id in self.category_mapping:
+        url = f"{self.base_url}{self.config.torrents_url}"
+        if cat_id and cat_id in self.category_mapping:
+            if self.category_mapping[cat_id].params:
                 mode = self.category_mapping[cat_id].params
+                
+            if self.category_mapping[cat_id].url:
+                url = f"{self.base_url}{self.category_mapping[cat_id].url}"
 
         # 构建请求参数
         request_data = RequestSearch(
@@ -82,10 +88,8 @@ class MTeamSite(BaseApiSite):
         if keyword:
             request_data.keyword = keyword
 
-        print(request_data.model_dump_json())
-
         data = request_data.model_dump()
-        response = self._post_json_with_header(f"{self.base_url}{self.config.torrents_url}", data)
+        response = self._post_json_with_header(url, data)
         data = ResponseModel(**response)
         if data.code != '0' or data.message != 'SUCCESS':
             raise Exception(f"请求失败: {data.message}")
@@ -94,6 +98,16 @@ class MTeamSite(BaseApiSite):
             tags = []
             if item.tags:
                 tags = item.tags.split("、")
+                
+            # 转换字节大小为合适的单位
+            size_bytes = float(item.size)
+            units = ['B', 'KB', 'MB', 'GB', 'TB']
+            size_unit = 0
+            while size_bytes >= 1024 and size_unit < len(units)-1:
+                size_bytes /= 1024
+                size_unit += 1
+            size_str = f"{size_bytes:.2f}{units[size_unit]}"
+            
             torrents.append(TorrentInfo(
                 torrent_id=item.id,
                 title=item.name,
@@ -102,7 +116,7 @@ class MTeamSite(BaseApiSite):
                 tags=tags,
                 discount=item.status.discount,
                 free_until=item.status.discount_end_time,
-                size=item.size,
+                size=size_str,
                 seeders=item.status.seeders,
                 leechers=item.status.leechers,
                 up_time=item.created_date
@@ -110,7 +124,6 @@ class MTeamSite(BaseApiSite):
         return TorrentInfoList(torrents=torrents)
     def _post_json_with_header(self, url: str, data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """发送POST请求获取JSON数据，使用请求头中的API密钥"""
-        print(data)
         response = self.session.post(url, json=data)
         if response.status_code != 200:
             raise Exception(f"请求失败: {response.status_code}")
@@ -137,7 +150,7 @@ class MTeamSite(BaseApiSite):
             subtitle=data.data.small_descr,
             descr_images=data.data.image_list,
             peers_info=f"{data.data.status.seeders}个做种者 | {data.data.status.leechers}个下载者",
-            info_text=f"体积：{data.data.size} 折扣：{self.discount_table[data.data.status.discount] or data.data.status.discount} 免费至：{data.data.status.discount_end_time}"
+            info_text=f"体积：{float(data.data.size)/(1024**3):.2f}GB 折扣：{self.discount_table[data.data.status.discount] or data.data.status.discount} 免费至：{data.data.status.discount_end_time}"
         )
 
     def get_search(self, keyword: str) -> TorrentInfoList:
@@ -192,6 +205,18 @@ class MTeamSite(BaseApiSite):
             seeding=user_peer_data.data.seeder,
             leeching=user_peer_data.data.leecher
         )
+    def get_torrent_files(self, torrent_id: int) -> bytes:
+        """获取种子文件"""
+        if not self._is_login():
+            raise Exception("未登录")
+        request_data = TorrentGenDlTokenRequest(id=torrent_id)
+        response = self._post_params_with_header(f"{self.base_url}{self.config.torrent_files_url}", request_data.model_dump())
+        data = TorrentGenDlTokenResponse(**response)
+        if data.code != '0' or data.message != 'SUCCESS':
+            raise Exception(f"请求失败: {data.message}")
+        # 发送请求获取种子文件
+        response = self.session.get(data.data)
+        return response.content
 
 def main():
     mteam = MTeamSite()

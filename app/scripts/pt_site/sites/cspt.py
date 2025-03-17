@@ -1,27 +1,15 @@
-import json
-from datetime import datetime
-from pydantic import HttpUrl
-from typing import Dict, Any, List
 from ..base import BasePTSite
-from ..schemas import TorrentInfo, TorrentDetails, SiteConfig, PTUserInfo, CategoryDetail
+from ..schemas import TorrentInfo, TorrentDetails, SiteConfig, PTUserInfo, CategoryDetail, TorrentInfoList
 from ..parser.nexusphp import NexusphpParser
 
 
-class DateTimeEncoder(json.JSONEncoder):
-    """处理datetime的JSON编码器"""
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        return super().default(obj)
-
-
-class QingwaptSite(BasePTSite):
-    """Crabpt站点实现"""
+class CsptSite(BasePTSite):
+    """CSpt站点实现"""
     
     def __init__(self):
         config = SiteConfig(
-            site_name="QingwaPT",
-            base_url="https://www.qingwapt.com/",
+            site_name="CSpt",
+            base_url="https://cspt.top",
             login_url="/takelogin.php",
             torrents_url="/torrents.php",
             details_url="/details.php",
@@ -31,22 +19,19 @@ class QingwaptSite(BasePTSite):
         )
 
         self.category_mapping = {
-            3: CategoryDetail(id=1, name="官种", params="tag=3"),
+            3: CategoryDetail(id=3, name="官种", params="tag_id=3"),
             401: CategoryDetail(id=401, name="电影", params="cat=401"),
             402: CategoryDetail(id=402, name="电视剧", params="cat=402"),
             403: CategoryDetail(id=403, name="综艺", params="cat=403"),
             404: CategoryDetail(id=404, name="纪录片", params="cat=404"),
             405: CategoryDetail(id=405, name="动漫", params="cat=405"),
-            415: CategoryDetail(id=415, name="漫画", params="cat=415"),
             408: CategoryDetail(id=408, name="音乐", params="cat=408"),
-            407: CategoryDetail(id=407, name="体育", params="cat=407"),
-            412: CategoryDetail(id=412, name="短剧", params="cat=412"),
         }
 
         super().__init__(config, NexusphpParser())
     
 
-    def get_torrents(self, **kwargs) -> List[TorrentInfo]:
+    def get_torrents(self, **kwargs) -> TorrentInfoList:
         """获取种子列表
         
         Args:
@@ -63,12 +48,17 @@ class QingwaptSite(BasePTSite):
         
         # 添加分类参数
         cat_id = kwargs.get('cat_id', None)
-        if cat_id in self.category_mapping:
-            params_str = self.category_mapping[cat_id].params.split("&")
-            for param in params_str:
-                    key, value = param.split("=")
-                    params[key] = value
-        soup = self._get_page(f"{self.base_url}{self.config.torrents_url}", params)
+        url = f"{self.base_url}{self.config.torrents_url}"
+        if cat_id and cat_id in self.category_mapping:
+            if self.category_mapping[cat_id].params:
+                params_list = self.category_mapping[cat_id].params.split("&")
+                for param in params_list:
+                    add_params = param.split("=")
+                    params[add_params[0]] = add_params[1]
+            if self.category_mapping[cat_id].url:
+                url = f"{self.base_url}{self.category_mapping[cat_id].url}"
+
+        soup = self._get_page(url, params)
         return self.parser.parse_torrent_list(soup)
 
     def get_details(self, torrent_id: int) -> TorrentDetails:
@@ -80,7 +70,7 @@ class QingwaptSite(BasePTSite):
         soup = self._get_page(f"{self.base_url}{self.config.details_url}?id={torrent_id}")
         return self.parser.parse_torrent_detail(soup)
     
-    def get_search(self, keyword: str) -> List[TorrentInfo]:
+    def get_search(self, keyword: str) -> TorrentInfoList:
         """搜索种子
         
         Args:
@@ -127,12 +117,9 @@ class QingwaptSite(BasePTSite):
 
 def main():
     """主函数"""
-    # qingwapt = QingwaptSite()
-    # qingwapt.set_proxy("http://127.0.0.1:7892")
-    # cookie = ''
-    # qingwapt.set_cookies(cookie)
-    # print(qingwapt.get_user_info())
     pass
+
+
 
 if __name__ == "__main__":
     main()

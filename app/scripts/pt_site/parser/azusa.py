@@ -4,12 +4,9 @@ import re
 from datetime import datetime
 from ..base import BaseSiteParser
 from ..schemas import TorrentInfo, TorrentDetails, PTUserInfo, TorrentInfoList, ParseTableTitle
-import json
-from ..schemas import TorrentStatus
 
-
-class NexusphpParser(BaseSiteParser):
-    """Nexusphp框架PT站点解析器"""
+class AzusaParser(BaseSiteParser):
+    """Azusa框架PT站点解析器"""
     
     def __init__(self):
         # 魔力值匹配模式
@@ -127,25 +124,6 @@ class NexusphpParser(BaseSiteParser):
 
         return ratio, uploaded, downloaded, seeding, leeching
     
-    def _parse_table_download_status(self, cells: BeautifulSoup) -> tuple[TorrentStatus, int]:
-        """解析种子是否是下载"""
-        if len(cells) < 1:
-            return TorrentStatus.NOT_DOWNLOAD, 0
-        child_1 = cells[1]
-        sending_elem = child_1.select_one("div[title*=seeding]")
-        if sending_elem:
-            title_list = sending_elem.attrs['title'].split(" ")
-            if len(title_list) > 1:
-                return TorrentStatus.SEEDING, int(title_list[1].replace("%", ""))
-                # return TorrentStatus.INACTIVITY, 50
-                
-        inactivity_elem = child_1.select_one("div[title*=inactivity]")
-        if inactivity_elem:
-            title_list = inactivity_elem.attrs['title'].split(" ")
-            if len(title_list) > 1:
-                return TorrentStatus.INACTIVITY, int(title_list[1].replace("%", ""))
-
-        return TorrentStatus.NOT_DOWNLOAD, 0
 
     def _parse_table_title(self, title_elem: BeautifulSoup) -> ParseTableTitle:
         """解析种子标题"""
@@ -157,7 +135,7 @@ class NexusphpParser(BaseSiteParser):
         free_until = None
         discount = None
         cover_elem = tds[0]
-        title_content_elem = tds[1]
+        title_content_elem = tds[1] if len(tds) > 1 else None
         
         img_elem = cover_elem.select_one('img.nexus-lazy-load')
         if img_elem:
@@ -168,7 +146,7 @@ class NexusphpParser(BaseSiteParser):
         if title_content_elem:
             title = title_content_elem.select_one('a')['title']
             torrent_id = title_content_elem.select_one('a')['href'].split('id=')[1].split('&')[0]
-            spans = title_content_elem.select('span[title=""]')
+            spans = title_content_elem.select('span[style*="background-color"]')
             if len(spans) == 0:
                 # hdsky 适配
                 spans = title_content_elem.select('span[class="optiontag"]')
@@ -176,21 +154,20 @@ class NexusphpParser(BaseSiteParser):
                 for span in spans:
                     tags.append(span.text.strip())
             all_sibling_nodes = title_content_elem.contents
-            # last_node = all_sibling_nodes[-1]
-            # if last_node and last_node.name == 'span':
-            #     subtitle = last_node.text.strip()
-            # if not last_node:
-            #     subtitle = title_content_elem.text.strip()
+            last_node = all_sibling_nodes[-1]
+
             is_br = False
             for node in all_sibling_nodes:
                 if node.name == 'br':
                     is_br = True
                 if is_br and not node.name:
                     subtitle = ' '.join(node.strip().split())
-        else:
-            br_elem = title_content_elem.select_one('br')
-            if br_elem:
-                subtitle = br_elem.next_sibling.strip()
+
+            # if last_node and last_node.name == 'span':
+            #     subtitle = ' '.join(last_node.text.strip().split())
+            # else:
+            #     subtitle = ' '.join(last_node.strip().split())
+            
 
         imgs = title_content_elem.select('img')
         for img in imgs:
@@ -230,16 +207,15 @@ class NexusphpParser(BaseSiteParser):
                 child_3 = cells[3]
                 child_4 = cells[4]
                 child_5 = cells[5]
-                child_6 = cells[6]
-                child_7 = cells[7]
+
                 parse_table_title = self._parse_table_title(child_1)
-                download_status, download_progress = self._parse_table_download_status(cells)
+                
                 up_time = child_3.select_one('span[title]')['title']
                 size = child_4.text
-                seeders = int(child_5.text.replace(',', ''))
-                leechers = int(child_6.text.replace(',', ''))
-                finished = int(child_7.text.replace(',', ''))
-
+                stats = child_5.text.strip().split('/')
+                seeders = int(stats[0].strip().replace(',', ''))
+                leechers = int(stats[1].strip().replace(',', ''))
+                finished = int(stats[2].strip().replace(',', ''))
 
                 torrent = TorrentInfo(
                     torrent_id=parse_table_title.torrent_id,
@@ -253,12 +229,9 @@ class NexusphpParser(BaseSiteParser):
                     seeders=seeders,
                     leechers=leechers,
                     up_time=up_time,
-                    finished=finished,
-                    download_status=download_status,
-                    download_progress=download_progress
+                    finished=finished
                 )
                 torrents.torrents.append(torrent)
-                    # print(torrent.model_dump_json())
         except Exception as e:
             print(f"解析错误: {str(e)}")
         return torrents
@@ -354,9 +327,9 @@ class NexusphpParser(BaseSiteParser):
 
 
 def main():
-    with open("app/scripts/pt_site/html/crabpt_list.html", "r", encoding="utf-8") as f:
-        soup = BeautifulSoup(f, "html.parser")
-        parser = NexusphpParser()
+    with open("app/scripts/pt_site/html/Azusa_list2.html", "r", encoding="utf-8") as f:
+        soup = BeautifulSoup(f, "lxml")
+        parser = AzusaParser()
         details = parser.parse_torrent_list(soup)
         print(details.model_dump_json())
         # details = parser.parse_torrent_detail(soup)
@@ -367,32 +340,5 @@ def main():
         # print(user_info.model_dump_json())
 
 
-def test_qingwapt():
-    with open("app/scripts/pt_site/html/QingwaPT_list2.html", "r", encoding="utf-8") as f:
-        soup = BeautifulSoup(f, "html.parser")
-        parser = NexusphpParser()
-        torrents = parser.parse_torrent_list(soup)
-        print(torrents.model_dump_json())
-
-def test_hdsky():
-    with open("app/scripts/pt_site/html/HDSky_list.html", "r", encoding="utf-8") as f:
-        soup = BeautifulSoup(f, "html.parser")
-        parser = NexusphpParser()
-        torrents = parser.parse_torrent_list(soup)
-        print(torrents.model_dump_json())
-
-
-def test_hdhome_search():
-    with open("app/scripts/pt_site/html/HDHome_search.html", "r", encoding="utf-8") as f:
-        soup = BeautifulSoup(f, "html.parser")
-        parser = NexusphpParser()
-        torrents = parser.parse_torrent_list(soup)
-        # print(torrents.model_dump_json())
-
-
-
 if __name__ == "__main__":
-    # main()
-    test_qingwapt()
-    # test_hdsky()
-    # test_hdhome_search()
+    main()

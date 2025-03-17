@@ -9,6 +9,14 @@ from .sites.rousi import RousiSite
 from .sites.nicept import NicePT
 from .sites.crabpt import CrabptSite
 from .sites.qingwapt import QingwaptSite
+from .sites.hdsky import HDSkySite
+from .sites.hdhome import HDHomeSite
+from .sites.azusa import AzusaSite
+from .sites.kamept import KameptSite
+from .sites.sunnypt import SunnyptSite
+from .sites.cspt import CsptSite
+from .sites.fsm import FsmSite
+from .sites.btschool import BtschoolSite
 # 使用字典映射来替代多个 if-elif 语句
 SITE_MAPPING = {
     "pter": {"class": PTerSite, "name": "PTer", "set_params": ["cookie"]},
@@ -21,7 +29,15 @@ SITE_MAPPING = {
     "rousi": {"class": RousiSite, "name": "Rousi", "set_params": ["cookie"]},
     "nicept": {"class": NicePT, "name": "NicePT", "set_params": ["cookie"]},
     "crabpt": {"class": CrabptSite, "name": "蟹黄堡", "set_params": ["cookie"]},
-    "qingwapt": {"class": QingwaptSite, "name": "青蛙", "set_params": ["cookie"]}
+    "qingwapt": {"class": QingwaptSite, "name": "青蛙", "set_params": ["cookie"]},
+    "hdsky": {"class": HDSkySite, "name": "HDSky", "set_params": ["cookie"]},
+    "hdhome": {"class": HDHomeSite, "name": "HDHome", "set_params": ["cookie"]},
+    "azusa": {"class": AzusaSite, "name": "Azusa", "set_params": ["cookie"]},
+    "kamept": {"class": KameptSite, "name": "Kamept", "set_params": ["cookie"]},
+    "fsm": {"class": FsmSite, "name": "FSM", "set_params": ["api_key", "passkey"]},
+    "sunnypt": {"class": SunnyptSite, "name": "Sunnypt", "set_params": ["cookie"]},
+    "cspt": {"class": CsptSite, "name": "CSpt", "set_params": ["cookie"]},
+    "btschool": {"class": BtschoolSite, "name": "Btschool", "set_params": ["cookie"]},
 }
 
 def get_all_sites() -> list[dict[str, str]]:
@@ -33,7 +49,7 @@ def get_all_sites() -> list[dict[str, str]]:
         result.append({"name": site_info["name"], "type": site_type})
     return result
 
-def dispatch(site_type: str, api_key: str = None, auth_token: str = None, cookie: str = None, user_agent: str = None):
+def dispatch(site_type: str, api_key: str = None, auth_token: str = None, cookie: str = None, user_agent: str = None, passkey: str = None):
     """
     获取站点实例
     
@@ -74,6 +90,11 @@ def dispatch(site_type: str, api_key: str = None, auth_token: str = None, cookie
                 pter.set_headers({"User-Agent": user_agent})
             else:
                 raise ValueError(f"参数 {param} 不能为空")
+        elif param == "passkey":
+            if passkey:
+                pter.set_passkey(passkey)
+            else:
+                raise ValueError(f"参数 {param} 不能为空")
         else:
             raise ValueError(f"不支持的参数: {param}")
     return pter
@@ -100,3 +121,5 @@ def get_site_class(site_type: str):
     return SITE_MAPPING.get(site_type)["class"]
 
 
+if __name__ == "__main__":
+    pass

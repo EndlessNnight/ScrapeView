@@ -34,9 +34,10 @@ class RaingfhSite(BasePTSite):
         self.category_mapping = {
             401: CategoryDetail(id=401, name="电影"),
             402: CategoryDetail(id=402, name="电视剧"),
-            403: CategoryDetail(id=403, name="纪录片"),
+            403: CategoryDetail(id=403, name="综艺"),
+            404: CategoryDetail(id=404, name="纪录片"),
             406: CategoryDetail(id=406, name="音乐"),
-            417: CategoryDetail(id=417, name="动漫"),
+            405: CategoryDetail(id=405, name="动漫"),
         }
 
         super().__init__(config, NexusphpParser())
@@ -60,7 +61,7 @@ class RaingfhSite(BasePTSite):
         # 添加分类参数
         cat_id = kwargs.get('cat_id', None)
         if cat_id:
-            params[f"cat{cat_id}"] = 1
+            params[f"cat"] = cat_id
         soup = self._get_page(f"{self.base_url}{self.config.torrents_url}", params)
         return self.parser.parse_torrent_list(soup)
 
@@ -120,10 +121,7 @@ class RaingfhSite(BasePTSite):
 
 def main():
     """主函数"""
-    raingfh = RaingfhSite()
-    raingfh.set_cookies("_ga=GA1.1.1998067533.1731287842; c_secure_uid=MTA4OTU%3D; c_secure_pass=b9258b4670355a06bd8b8064b4f1b1f4; c_secure_ssl=eWVhaA%3D%3D; c_secure_tracker_ssl=eWVhaA%3D%3D; c_secure_login=bm9wZQ%3D%3D; cf_clearance=uFD1vVX0CCi1unutSH32RcNWiw.YJBefD1_Hjl4FGo8-1739412677-1.2.1.1-Qw_0H0Ac.K5pV9rI0vmakQGzcQfIqHlhouRllqw0llSzA03ae8FBaantRWzqv6hLoL8Rjcpuqc4nrZUWEqqIYDmqver7dEPIwZ0MDCsZZVWwQanY8nvsnzdc226xSSASZh7KQChcU7g9AMUwa7rWg3OtttxkV9YixaaUwpeulALzlHUtoULEKxZu91oWUy_ocUXg3QlyKVoIxXpAAIwJTdLTevcv_09m5vEfLzU9q.Y1rAZdv1lofttMwSLjkJ0oz0GGU_JJLLLBzHDQ75x4W2sZZkAolmLyp323gGHfXUQ; sl-session=8PuHRE0q0Wegc2qP2aZyog==; _ga_B9PVMRN5DH=GS1.1.1741680532.9.1.1741680533.0.0.0")
-    print(raingfh.get_torrents().model_dump_json())
-    
+    pass
 
 
 

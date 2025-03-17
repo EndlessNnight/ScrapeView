@@ -32,11 +32,12 @@ class RousiSite(BasePTSite):
         )
 
         self.category_mapping = {
-            401: CategoryDetail(id=401, name="电影"),
-            402: CategoryDetail(id=402, name="电视剧"),
-            403: CategoryDetail(id=403, name="纪录片"),
-            406: CategoryDetail(id=406, name="音乐"),
-            417: CategoryDetail(id=417, name="动漫"),
+            401: CategoryDetail(id=401, name="电影", params="cat=401"),
+            402: CategoryDetail(id=402, name="电视剧", params="cat=402"),
+            403: CategoryDetail(id=403, name="纪录片", params="cat=403"),
+            406: CategoryDetail(id=406, name="音乐", params="cat=406"),
+            417: CategoryDetail(id=417, name="动漫", params="cat=417"),
+            1: CategoryDetail(id=1, name="9KG", url="/special.php"),
         }
 
         super().__init__(config, NexusphpParser())
@@ -56,12 +57,19 @@ class RousiSite(BasePTSite):
             "spstate": 0,
             "page": kwargs.get('page', 0),
         }
-        
+        url = f"{self.base_url}{self.config.torrents_url}"
         # 添加分类参数
         cat_id = kwargs.get('cat_id', None)
-        if cat_id:
-            params[f"cat{cat_id}"] = 1
-        soup = self._get_page(f"{self.base_url}{self.config.torrents_url}", params)
+        if cat_id and cat_id in self.category_mapping:
+            if self.category_mapping[cat_id].params:
+                params_list = self.category_mapping[cat_id].params.split("&")
+                for param in params_list:
+                    add_params = param.split("=")
+                    params[add_params[0]] = add_params[1]
+            if self.category_mapping[cat_id].url:
+                url = f"{self.base_url}{self.category_mapping[cat_id].url}"
+
+        soup = self._get_page(url, params)
         return self.parser.parse_torrent_list(soup)
 
     def get_details(self, torrent_id: int) -> TorrentDetails:

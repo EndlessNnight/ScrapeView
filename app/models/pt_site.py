@@ -19,6 +19,7 @@ class Site(Base):
     user_agent: Mapped[Optional[str]] = mapped_column(Text, nullable=True, comment="User-Agent")
     api_key: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, comment="API密钥")
     auth_token: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, comment="认证令牌")
+    passkey: Mapped[Optional[str]] = mapped_column(String(255), nullable=True, comment="Passkey")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), comment="创建时间")
     updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now(), comment="更新时间")
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False, comment="用户ID")
@@ -67,26 +68,3 @@ class PTUser(Base):
     
     def __repr__(self) -> str:
         return f"<PTUser(id={self.id}, site_id={self.site_id}, username={self.username})>"
-
-
-class ProxyImage(Base):
-    """代理图片表，保存代理图片数据"""
-    
-    __tablename__ = "proxy_images"
-    
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    original_url: Mapped[str] = mapped_column(String(1024), nullable=False, index=True, comment="原始图片URL")
-    local_path: Mapped[str] = mapped_column(String(255), nullable=False, comment="本地存储路径")
-    file_name: Mapped[str] = mapped_column(String(255), nullable=False, comment="文件名")
-    file_size: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, comment="文件大小(字节)")
-    mime_type: Mapped[Optional[str]] = mapped_column(String(100), nullable=True, comment="MIME类型")
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), comment="创建时间")
-    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), onupdate=func.now(), comment="更新时间")
-    
-    # 表选项
-    __table_args__ = {
-        "comment": "代理图片表，保存代理图片数据"
-    }
-    
-    def __repr__(self) -> str:
-        return f"<ProxyImage(id={self.id}, original_url={self.original_url}, local_path={self.local_path})>"

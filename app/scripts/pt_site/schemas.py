@@ -1,6 +1,13 @@
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
+from enum import Enum
+
+class TorrentStatus(Enum):
+    """种子状态枚举"""
+    NOT_DOWNLOAD = 0
+    SEEDING = 1
+    INACTIVITY = 2
 
 
 class TorrentInfo(BaseModel):
@@ -17,6 +24,8 @@ class TorrentInfo(BaseModel):
     leechers: int
     up_time: Optional[datetime] = None
     finished: Optional[int] = None
+    download_status: Optional[TorrentStatus] = TorrentStatus.NOT_DOWNLOAD
+    download_progress: Optional[int] = None
     
     class Config:
         json_schema_extra = {
@@ -43,7 +52,7 @@ class TorrentInfoList(BaseModel):
 class TorrentDetails(BaseModel):
     """种子详细信息"""
     title: str = ""
-    subtitle: str = ""
+    subtitle: Optional[str] = ""
     descr_images: List[str] = []
     peers_info: str = ""
     info_text: str = ""
@@ -85,7 +94,7 @@ class SiteConfig(BaseModel):
     login_url: Optional[str] = None
     torrents_url: str
     details_url: str
-    search_url: str
+    search_url: Optional[str] = None
     user_info_url: str
     user_info_peer_url: Optional[str] = None
     default_categories: List[int] = []
@@ -95,6 +104,10 @@ class SiteConfig(BaseModel):
     
     class Config:
         arbitrary_types_allowed = True
+
+class ApiSiteConfig(SiteConfig):
+    """API站点配置"""
+    torrent_files_url: str
 
 class PTUserInfo(BaseModel):
     """PT用户信息"""
@@ -116,6 +129,7 @@ class CategoryDetail(BaseModel):
     id: int = Field(..., description="分类ID")
     name: str = Field(..., description="分类名称")
     params: Optional[str] = Field(None, description="分类参数")
+    url: Optional[str] = Field(None, description="分类URL")
 
 
 class ParseTableTitle(BaseModel):

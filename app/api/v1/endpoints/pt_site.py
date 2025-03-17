@@ -16,29 +16,55 @@ from app.schemas.pt_site import (
     SiteWithUsers,
     SupportedSite,
     PTUserResponse,
-    CategoryResponse,
-    ProxyImageCreate,
-    ProxyImageResponse,
+    CategoryResponse
 )
 from app.scripts.pt_site.dispatch import dispatch, get_all_sites, get_site_name, get_site_set_params
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Dict, Tuple
 from app.core.error_codes import ErrorCode
 from app.core.cache import LocalCache
 from app.core.config import settings
 import app.crud.pt_site as crud
-from app.services.image_service import download_and_store_image
 import tempfile
 import os
-import hashlib
-import aiohttp
-import mimetypes
-from pathlib import Path
-import shutil
-from urllib.parse import urlparse
-import uuid
 import logging
+# 获取日志记录器
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
+
+
+def get_pter_instance(db: Session, site_id: int, user_id: int) -> Tuple[Any, Any]:
+    """
+    获取站点并创建pter实例
+    
+    Args:
+        db: 数据库会话
+        site_id: 站点ID
+        user_id: 用户ID
+        
+    Returns:
+        Tuple[Site, Any]: 站点对象和pter实例
+        
+    Raises:
+        HTTPException: 站点不存在或无权访问
+    """
+    site = crud.get_site_by_id(db, site_id, user_id=user_id)
+    if not site:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="站点不存在或无权访问"
+        )
+    
+    pter = dispatch(
+        site.schema_type, 
+        cookie=site.cookie, 
+        user_agent=site.user_agent, 
+        api_key=site.api_key, 
+        auth_token=site.auth_token, 
+        passkey=site.passkey
+    )
+    
+    return site, pter
 
 
 @router.get("/ptsites", response_model=ApiResponse[PaginationResponse[PTSitesResponse]])
@@ -63,7 +89,7 @@ async def get_pt_sites(
             # 如果站点有PT用户数据，使用第一个用户的数据
             pt_user = pt_users[0] if pt_users else None
             
-            pter = dispatch(site.schema_type, cookie=site.cookie, user_agent=site.user_agent, api_key=site.api_key, auth_token=site.auth_token)
+            pter = dispatch(site.schema_type, cookie=site.cookie, user_agent=site.user_agent, api_key=site.api_key, auth_token=site.auth_token, passkey=site.passkey)
             category_list = pter.get_all_category()
             category = [CategoryResponse(id=cat.id, name=cat.name) for cat in category_list]
 
@@ -114,15 +140,9 @@ async def get_torrents(
         cat_id: 分类ID，不传则使用默认分类
     """
     try:
-        # 创建PTer实例
-        site = crud.get_site_by_id(db, site_id, user_id=current_user.id)
-        if not site:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="站点不存在或无权访问"
-            )
+        # 获取站点和pter实例
+        site, pter = get_pter_instance(db, site_id, current_user.id)
         
-        pter = dispatch(site.schema_type, cookie=site.cookie, user_agent=site.user_agent, api_key=site.api_key, auth_token=site.auth_token)
         params = {"page": page}
         if cat_id:
             params["cat_id"] = cat_id
@@ -171,29 +191,18 @@ async def search_torrents(
         cat_id: 分类ID，不传则使用默认分类
     """
     try:
-        site = crud.get_site_by_id(db, site_id, user_id=current_user.id)
-        if not site:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="站点不存在或无权访问"
-            )
-        pter = dispatch(site.schema_type, cookie=site.cookie, user_agent=site.user_agent, api_key=site.api_key, auth_token=site.auth_token)
-        # 设置cookie和headers
-        pter.set_cookies(site.cookie)
-        pter.set_headers({
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-        })
+        # 获取站点和pter实例
+        _, pter = get_pter_instance(db, site_id, current_user.id)
         
         # 搜索种子
         torrents = pter.get_search(keyword)
         # 由于PTer API不返回总数，这里暂时将总数设置为搜索结果的种子数
-        total = len(torrents)
-        
+        total = len(torrents.torrents)
         return ApiResponse(
             code=ErrorCode.SUCCESS,
             message="搜索种子成功",
             data=PaginationResponse(
-                items=torrents,
+                items=torrents.torrents,
                 total=total
             )
         )
@@ -227,13 +236,9 @@ async def get_torrent_files(
     temp_file_path = ""
     
     try:
-        site = crud.get_site_by_id(db, site_id, user_id=current_user.id)
-        if not site:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="站点不存在或无权访问"
-            )
-        pter = dispatch(site.schema_type, cookie=site.cookie, user_agent=site.user_agent, api_key=site.api_key, auth_token=site.auth_token)
+        # 获取站点和pter实例
+        _, pter = get_pter_instance(db, site_id, current_user.id)
+        
         torrent_content = pter.get_torrent_files(torrent_id)
         
         # 使用NamedTemporaryFile创建临时文件
@@ -278,15 +283,8 @@ async def get_torrent_detail(
         torrent_id: 种子ID
     """
     try:
-        # 创建PTer实例
-        site = crud.get_site_by_id(db, site_id, user_id=current_user.id)
-        if not site:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="站点不存在或无权访问"
-            )
-        pter = dispatch(site.schema_type, cookie=site.cookie, user_agent=site.user_agent)
-
+        # 获取站点和pter实例
+        site, pter = get_pter_instance(db, site_id, current_user.id)
         
         cache = LocalCache()
         cache_key = f"get_torrent_detail{site_id}_{torrent_id}"
@@ -341,7 +339,7 @@ async def create_site(
     """
     创建新站点
     只需要传入 schema_type, cookie 和 User-Agent（可选）
-    可选参数：api_key, auth_token
+    可选参数：api_key, auth_token, passkey
     只有在成功获取到用户信息时才会创建站点
     """
     # 检查该用户是否已有相同类型的站点
@@ -355,7 +353,14 @@ async def create_site(
     # 先验证能否获取用户信息
     try:
         # 创建PTer实例并获取用户信息
-        pter = dispatch(site.schema_type, cookie=site.cookie, user_agent=site.user_agent, api_key=site.api_key, auth_token=site.auth_token)
+        pter = dispatch(
+            site.schema_type, 
+            cookie=site.cookie, 
+            user_agent=site.user_agent, 
+            api_key=site.api_key, 
+            auth_token=site.auth_token, 
+            passkey=site.passkey
+        )
 
         user_info = pter.get_user_info()
         
@@ -382,6 +387,7 @@ async def create_site(
             schema_type=db_site.schema_type,
             api_key=db_site.api_key,
             auth_token=db_site.auth_token,
+            passkey=db_site.passkey,
             user_info=user_info
         )
         return ApiResponse(
@@ -431,7 +437,7 @@ async def update_site(
 ):
     """
     更新站点信息
-    可以修改 cookie、User-Agent、api_key 和 auth_token
+    可以修改 cookie、User-Agent、api_key、auth_token 和 passkey
     """
     # 检查站点是否存在
     db_site = crud.get_site_by_id(db, site_id, user_id=current_user.id)
@@ -447,7 +453,15 @@ async def update_site(
     # 如果更新了 cookie，尝试获取最新的用户信息
     if site_update.cookie:
         try:
-            pter = dispatch(updated_site.schema_type, cookie=site_update.cookie, user_agent=site_update.user_agent, api_key=site_update.api_key, auth_token=site_update.auth_token)
+            # 创建新的pter实例，使用更新后的站点信息
+            pter = dispatch(
+                updated_site.schema_type, 
+                cookie=site_update.cookie, 
+                user_agent=site_update.user_agent or updated_site.user_agent, 
+                api_key=site_update.api_key or updated_site.api_key, 
+                auth_token=site_update.auth_token or updated_site.auth_token,
+                passkey=site_update.passkey or updated_site.passkey
+            )
 
             # 获取用户信息
             user_info = pter.get_user_info()
@@ -544,17 +558,9 @@ async def refresh_site_user_info(
     
     通过站点ID获取站点信息，然后使用站点的cookie和user-agent获取最新的用户信息，并更新数据库中的用户数据
     """
-    # 获取站点信息
-    db_site = crud.get_site_by_id(db, site_id, user_id=current_user.id)
-    if not db_site:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="站点不存在"
-        )
-    
-    # 创建PTer实例并获取用户信息
     try:
-        pter = dispatch(db_site.schema_type, cookie=db_site.cookie, user_agent=db_site.user_agent, api_key=db_site.api_key, auth_token=db_site.auth_token)
+        # 获取站点和pter实例
+        site, pter = get_pter_instance(db, site_id, current_user.id)
         
         user_info = pter.get_user_info()
         
@@ -579,6 +585,8 @@ async def refresh_site_user_info(
             "message": "用户信息更新成功",
             "data": pt_user
         }
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -597,16 +605,10 @@ async def get_site_categories(
     返回站点所有分类的ID和名称
     """
     try:
-        # 获取站点信息
-        site = crud.get_site_by_id(db, site_id, user_id=current_user.id)
-        if not site:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="站点不存在或无权访问"
-            )
+        # 获取站点和pter实例
+        _, pter = get_pter_instance(db, site_id, current_user.id)
         
-        # 创建PTer实例并获取分类信息
-        pter = dispatch(site.schema_type, cookie=site.cookie, user_agent=site.user_agent, api_key=site.api_key, auth_token=site.auth_token)
+        # 获取分类信息
         category_list = pter.get_all_category()
         
         return ApiResponse(
@@ -619,117 +621,3 @@ async def get_site_categories(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"获取站点分类失败: {str(e)}"
         )
-
-# 代理图片API
-import time
-
-# 先定义特定路由
-@router.get("/images/proxy", response_class=FileResponse)
-async def proxy_image_get(
-    url: str = Query(..., description="原始图片URL"),
-    db: Session = Depends(get_db)
-):
-    """通过GET方法代理图片
-    
-    通过查询参数url获取远程图片，下载并存储到本地，直接返回图片文件
-    """
-    try:
-        # 检查是否已经存在相同URL的图片
-        existing_image = crud.get_proxy_image_by_url(db, url)
-        if existing_image:
-            # 如果图片已存在，直接返回本地文件
-            file_path = os.path.join(existing_image.local_path, existing_image.file_name)
-            if os.path.exists(file_path):
-                return FileResponse(
-                    path=file_path,
-                    media_type=existing_image.mime_type or "image/jpeg"
-                )
-        
-        # 如果不存在，异步下载并存储
-        file_path, content_type, _ = await download_and_store_image(
-            url=url,
-            db=db
-        )
-        
-        # 返回文件
-        return FileResponse(
-            path=file_path,
-            media_type=content_type
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"图片代理失败: {str(e)}"
-        )
-
-@router.post("/images/proxy", response_class=FileResponse)
-async def proxy_image(
-    image: ProxyImageCreate,
-    db: Session = Depends(get_db)
-):
-    """代理图片
-    
-    下载远程图片并存储到本地，直接返回图片文件
-    """
-    try:
-        # 检查是否已经存在相同URL的图片
-        existing_image = crud.get_proxy_image_by_url(db, image.original_url)
-        if existing_image:
-            # 如果图片已存在，直接返回本地文件
-            file_path = os.path.join(existing_image.local_path, existing_image.file_name)
-            if os.path.exists(file_path):
-                return FileResponse(
-                    path=file_path,
-                    media_type=existing_image.mime_type or "image/jpeg"
-                )
-        
-        # 如果不存在，异步下载并存储
-        file_path, content_type, _ = await download_and_store_image(
-            url=image.original_url,
-            db=db
-        )
-        
-        # 返回文件
-        return FileResponse(
-            path=file_path,
-            media_type=content_type
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"图片代理失败: {str(e)}"
-        )
-
-# 再定义通用路由
-@router.get("/images/{image_id}", response_class=FileResponse)
-async def get_proxy_image(
-    image_id: int = PathParam(..., ge=1, description="图片ID"),
-    db: Session = Depends(get_db)
-):
-    """获取代理图片
-    
-    根据图片ID获取本地存储的图片
-    """
-    # 获取图片信息
-    image = crud.get_proxy_image_by_id(db, image_id)
-    if not image:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="图片不存在"
-        )
-    
-    # 构建完整的文件路径
-    file_path = os.path.join(image.local_path, image.file_name)
-    
-    # 检查文件是否存在
-    if not os.path.exists(file_path):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="图片文件不存在"
-        )
-    
-    # 返回文件
-    return FileResponse(
-        path=file_path,
-        media_type=image.mime_type or "image/jpeg"
-    )

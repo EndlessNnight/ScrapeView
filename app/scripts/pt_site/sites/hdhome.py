@@ -1,11 +1,10 @@
 import json
 from datetime import datetime
 from pydantic import HttpUrl
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List
 from ..base import BasePTSite
 from ..schemas import TorrentInfo, TorrentDetails, SiteConfig, PTUserInfo, CategoryDetail, TorrentInfoList
-from ..parser.hhanclub import HHAnClubParser
-from bs4 import BeautifulSoup
+from ..parser.nexusphp import NexusphpParser
 
 
 
@@ -17,13 +16,13 @@ class DateTimeEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
-class HHAnClubSite(BasePTSite):
-    """HDFans站点实现"""
+class HDHomeSite(BasePTSite):
+    """HDHome站点实现"""
     
     def __init__(self):
         config = SiteConfig(
-            site_name="HHAnClub",
-            base_url="https://hhanclub.top",
+            site_name="HDHome",
+            base_url="https://hdhome.org",
             login_url="/takelogin.php",
             torrents_url="/torrents.php",
             details_url="/details.php",
@@ -33,68 +32,11 @@ class HHAnClubSite(BasePTSite):
         )
 
         self.category_mapping = {
-            401: CategoryDetail(id=401, name="电影", params="cat[]=401"),
-            402: CategoryDetail(id=402, name="电视剧", params="cat[]=402"),
-            403: CategoryDetail(id=403, name="综艺", params="cat[]=403"),
-            405: CategoryDetail(id=405, name="动漫", params="cat[]=405"),
-            404: CategoryDetail(id=404, name="纪录片", params="cat[]=404"),
-            407: CategoryDetail(id=407, name="体育", params="cat[]=407"),
+            1: CategoryDetail(id=1, name="官方", params="tag=gf"),
         }
 
-        super().__init__(config, HHAnClubParser())
+        super().__init__(config, NexusphpParser())
     
-    def _is_login_page(self, soup) -> bool:
-        """检查页面是否是登录页面
-        
-        Args:
-            soup: BeautifulSoup对象
-            
-        Returns:
-            bool: 如果是登录页面则返回True，否则返回False
-        """
-        # 检查是否包含登录表单
-        login_form = soup.find('form', {'action': 'takelogin.php'})
-        if login_form:
-            return True
-            
-        # 检查页面标题是否包含"登录"字样
-        title = soup.find('title')
-        if title and '登录' in title.text:
-            return True
-            
-        # 检查是否有登录按钮
-        login_button = soup.find('input', {'type': 'submit', 'value': '登录'})
-        if login_button:
-            return True
-            
-        return False
-    
-    def is_logged_in(self) -> bool:
-        """检查用户是否已登录
-        
-        Returns:
-            bool: 如果用户已登录则返回True，否则返回False
-        """
-        # 首先检查是否设置了cookie
-        if not self.session.cookies:
-            return False
-            
-        # 访问首页检查是否已登录
-        try:
-            soup = self._get_page(f"{self.base_url}/index.php")
-            
-            # 检查是否是登录页面
-            if self._is_login_page(soup):
-                return False
-                
-            # 检查是否有用户信息元素，表示已登录
-            # 这里需要根据实际网站结构调整选择器
-            user_info_element = soup.select_one('a[href*="usercp.php"]')
-            return user_info_element is not None
-        except Exception as e:
-            print(f"检查登录状态时出错: {e}")
-            return False
-        
 
     def get_torrents(self, **kwargs) -> TorrentInfoList:
         """获取种子列表
@@ -113,11 +55,11 @@ class HHAnClubSite(BasePTSite):
         
         # 添加分类参数
         cat_id = kwargs.get('cat_id', None)
-        if cat_id and cat_id in self.category_mapping:
-            add_params = self.category_mapping[cat_id].params.split("&")
-            for param in add_params:
-                key, value = param.split("=")
-                params[key] = value
+        if cat_id in self.category_mapping:
+            params_str = self.category_mapping[cat_id].params.split("&")
+            for param in params_str:
+                    key, value = param.split("=")
+                    params[key] = value
         soup = self._get_page(f"{self.base_url}{self.config.torrents_url}", params)
         return self.parser.parse_torrent_list(soup)
 
@@ -136,17 +78,7 @@ class HHAnClubSite(BasePTSite):
         Args:
             keyword: 搜索关键词
         """
-        params = {
-            "search": keyword,
-            "search-mode": 0,
-            "incldead": 1,
-            "spstate": 0,
-            "inclbookmarked": 0,
-            "search_area": 0,
-            "search_all": 1
-        }
-
-        soup = self._get_page(f"{self.base_url}{self.config.search_url}", params)
+        soup = self._get_page(f"{self.base_url}{self.config.search_url}?search={keyword}")
         return self.parser.parse_torrent_list(soup)
 
     def get_user_info(self) -> PTUserInfo:
@@ -187,7 +119,9 @@ class HHAnClubSite(BasePTSite):
 
 def main():
     """主函数"""
-    pass
+    hdhome = HDHomeSite()
+    print(hdhome.get_all_category())
+
 
 
 if __name__ == "__main__":

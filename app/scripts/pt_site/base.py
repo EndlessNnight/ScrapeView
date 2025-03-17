@@ -3,7 +3,7 @@ from typing import List, Dict, Any, Optional, Type
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from .schemas import TorrentInfo, TorrentDetails, SiteConfig, Category, TorrentInfoList
+from .schemas import TorrentInfo, TorrentDetails, SiteConfig, Category, TorrentInfoList, ApiSiteConfig
 
 class BaseSiteParser(ABC):
     """站点解析器基类"""
@@ -53,14 +53,18 @@ class BasePTSite(ABC):
             for key, value in cookies.items():
                 self.session.cookies.set(key, value)
             
-    def _get_page(self, url: str, params: Optional[Dict[str, Any]] = None) -> BeautifulSoup:
+    def set_proxy(self, proxy: str) -> None:
+        """设置代理"""
+        self.session.proxies.update({"http": proxy, "https": proxy}) 
+
+    def _get_page(self, url: str, params: Optional[Dict[str, Any]] = None, parser: str = 'html.parser') -> BeautifulSoup:
         """获取页面内容"""
         response = self.session.get(url, params=params)
         if response.status_code != 200:
             raise Exception(f"请求失败: {response.status_code}")
-        # with open('response.html', 'w', encoding='utf-8') as f:
+        # with open(f'{self.config.site_name}.html', 'w', encoding='utf-8') as f:
         #     f.write(response.text)
-        return BeautifulSoup(response.text, 'html.parser')
+        return BeautifulSoup(response.text, parser)
     
     
     def get_all_category(self) -> List[Category]:
@@ -89,10 +93,15 @@ class BasePTSite(ABC):
     def get_user_info(self) -> Dict[str, Any]:
         """获取用户信息"""
         pass
+    
+    @abstractmethod
+    def get_torrent_files(self, torrent_id: int) -> bytes:
+        """获取种子文件列表"""
+        pass
 
 class BaseApiSite(ABC):
     """API站点基类"""
-    def __init__(self, site_config: SiteConfig):
+    def __init__(self, site_config: ApiSiteConfig):
         self.config = site_config
         self.base_url = site_config.base_url.rstrip('/')
         self.session = requests.Session()
@@ -147,4 +156,19 @@ class BaseApiSite(ABC):
     @abstractmethod
     def get_details(self, torrent_id: int) -> TorrentDetails:
         """获取种子详情"""
+        pass
+
+    @abstractmethod
+    def get_search(self, keyword: str) -> List[TorrentInfo]:
+        """搜索种子"""
+        pass
+
+    @abstractmethod
+    def get_user_info(self) -> Dict[str, Any]:
+        """获取用户信息"""
+        pass
+    
+    @abstractmethod
+    def get_torrent_files(self, torrent_id: int) -> bytes:
+        """获取种子文件列表"""
         pass

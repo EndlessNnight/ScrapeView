@@ -56,7 +56,7 @@ class TorrentListResponse(TorrentInfo):
 class TorrentDetails(BaseModel):
     """种子详情模型"""
     title: str = Field(..., description="主标题")
-    subtitle: str = Field("", description="副标题")
+    subtitle: Optional[str] = Field("", description="副标题")
     descr_images: List[str] = Field(default_factory=list, description="简介图片列表")
     peers_info: str = Field("", description="同伴信息")
     info_text: str = Field("", description="基本信息")
@@ -73,6 +73,7 @@ class SiteBase(BaseModel):
     user_agent: Optional[str] = Field("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", description="User-Agent")
     api_key: Optional[str] = Field(None, description="API密钥")
     auth_token: Optional[str] = Field(None, description="认证令牌")
+    passkey: Optional[str] = Field(None, description="Passkey")
 
 
 class SiteCreate(SiteBase):
@@ -86,6 +87,7 @@ class SiteUpdate(BaseModel):
     user_agent: Optional[str] = Field(None, description="User-Agent")
     api_key: Optional[str] = Field(None, description="API密钥")
     auth_token: Optional[str] = Field(None, description="认证令牌")
+    passkey: Optional[str] = Field(None, description="Passkey")
 
 
 
@@ -144,8 +146,9 @@ class Site(BaseModel):
     name: Optional[str] = Field(None, description="站点名称")
     url: Optional[HttpUrl] = Field(None, description="站点URL")
     schema_type: Optional[str] = Field(None, description="架构类型")
-    api_key: Optional[str] = Field(None, description="API密钥")
-    auth_token: Optional[str] = Field(None, description="认证令牌")
+    # api_key: Optional[str] = Field(None, description="API密钥")
+    # auth_token: Optional[str] = Field(None, description="认证令牌")
+    passkey: Optional[str] = Field(None, description="Passkey")
     user_info: Optional[PTUserInfo] = Field(None, description="用户信息")
 
 class SiteWithUsers(Site):
@@ -157,37 +160,3 @@ class SupportedSite(BaseModel):
     """支持的站点模型"""
     name: str = Field(..., description="站点名称")
     type: str = Field(..., description="站点类型")
-
-
-class ProxyImageBase(BaseModel):
-    """代理图片基础模型"""
-    original_url: str = Field(..., description="原始图片URL")
-    headers: Optional[dict] = Field(None, description="自定义请求头")
-
-
-class ProxyImageCreate(ProxyImageBase):
-    """创建代理图片模型"""
-    pass
-
-
-class ProxyImageUpdate(BaseModel):
-    """更新代理图片模型"""
-    original_url: Optional[str] = Field(None, description="原始图片URL")
-    local_path: Optional[str] = Field(None, description="本地存储路径")
-    file_name: Optional[str] = Field(None, description="文件名")
-    file_size: Optional[int] = Field(None, description="文件大小(字节)")
-    mime_type: Optional[str] = Field(None, description="MIME类型")
-
-
-class ProxyImageResponse(ProxyImageBase):
-    """代理图片响应模型"""
-    id: int = Field(..., description="图片ID")
-    local_path: str = Field(..., description="本地存储路径")
-    file_name: str = Field(..., description="文件名")
-    file_size: Optional[int] = Field(None, description="文件大小(字节)")
-    mime_type: Optional[str] = Field(None, description="MIME类型")
-    created_at: datetime = Field(..., description="创建时间")
-    updated_at: Optional[datetime] = Field(None, description="更新时间")
-
-    class Config:
-        from_attributes = True

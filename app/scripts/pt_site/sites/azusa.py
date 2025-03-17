@@ -3,8 +3,10 @@ from datetime import datetime
 from pydantic import HttpUrl
 from typing import Dict, Any, List
 from ..base import BasePTSite
-from ..schemas import TorrentInfo, TorrentDetails, SiteConfig, PTUserInfo, CategoryDetail
-from ..parser.nexusphp import NexusphpParser
+from ..schemas import TorrentInfo, TorrentDetails, SiteConfig, PTUserInfo, CategoryDetail, TorrentInfoList
+from ..parser.azusa import AzusaParser
+
+
 
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -15,13 +17,13 @@ class DateTimeEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
-class QingwaptSite(BasePTSite):
-    """Crabpt站点实现"""
+class AzusaSite(BasePTSite):
+    """Azusa站点实现"""
     
     def __init__(self):
         config = SiteConfig(
-            site_name="QingwaPT",
-            base_url="https://www.qingwapt.com/",
+            site_name="Azusa",
+            base_url="https://zimiao.icu",
             login_url="/takelogin.php",
             torrents_url="/torrents.php",
             details_url="/details.php",
@@ -31,22 +33,17 @@ class QingwaptSite(BasePTSite):
         )
 
         self.category_mapping = {
-            3: CategoryDetail(id=1, name="官种", params="tag=3"),
-            401: CategoryDetail(id=401, name="电影", params="cat=401"),
-            402: CategoryDetail(id=402, name="电视剧", params="cat=402"),
-            403: CategoryDetail(id=403, name="综艺", params="cat=403"),
-            404: CategoryDetail(id=404, name="纪录片", params="cat=404"),
-            405: CategoryDetail(id=405, name="动漫", params="cat=405"),
-            415: CategoryDetail(id=415, name="漫画", params="cat=415"),
-            408: CategoryDetail(id=408, name="音乐", params="cat=408"),
-            407: CategoryDetail(id=407, name="体育", params="cat=407"),
-            412: CategoryDetail(id=412, name="短剧", params="cat=412"),
+            402: CategoryDetail(id=402, name="漫画", params="cat=402"),
+            403: CategoryDetail(id=403, name="轻小说", params="cat=403"),
+            404: CategoryDetail(id=404, name="游戏", params="cat=404"),
+            407: CategoryDetail(id=407, name="CG", params="cat=407"),
+            409: CategoryDetail(id=409, name="音乐", params="cat=409"),
         }
 
-        super().__init__(config, NexusphpParser())
+        super().__init__(config, AzusaParser())
     
 
-    def get_torrents(self, **kwargs) -> List[TorrentInfo]:
+    def get_torrents(self, **kwargs) -> TorrentInfoList:
         """获取种子列表
         
         Args:
@@ -68,7 +65,7 @@ class QingwaptSite(BasePTSite):
             for param in params_str:
                     key, value = param.split("=")
                     params[key] = value
-        soup = self._get_page(f"{self.base_url}{self.config.torrents_url}", params)
+        soup = self._get_page(f"{self.base_url}{self.config.torrents_url}", params, parser='lxml')
         return self.parser.parse_torrent_list(soup)
 
     def get_details(self, torrent_id: int) -> TorrentDetails:
@@ -78,9 +75,9 @@ class QingwaptSite(BasePTSite):
             torrent_id: 种子ID
         """
         soup = self._get_page(f"{self.base_url}{self.config.details_url}?id={torrent_id}")
-        return self.parser.parse_torrent_detail(soup)
+        return self.parser.parse_torrent_detail(soup) 
     
-    def get_search(self, keyword: str) -> List[TorrentInfo]:
+    def get_search(self, keyword: str) -> TorrentInfoList:
         """搜索种子
         
         Args:
@@ -127,12 +124,10 @@ class QingwaptSite(BasePTSite):
 
 def main():
     """主函数"""
-    # qingwapt = QingwaptSite()
-    # qingwapt.set_proxy("http://127.0.0.1:7892")
-    # cookie = ''
-    # qingwapt.set_cookies(cookie)
-    # print(qingwapt.get_user_info())
-    pass
+    azusa = AzusaSite()
+    print(azusa.get_all_category())
+
+
 
 if __name__ == "__main__":
     main()

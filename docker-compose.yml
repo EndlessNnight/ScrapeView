@@ -2,19 +2,63 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    image: yolo/scrape-view:latest
     container_name: scrapeview-api
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
-      - ./downloads:/app/downloads
-      - ./sqlite.db:/app/sqlite.db
-    env_file:
-      - .env
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      - ./db:/app/db
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    environment:
+      - SCRAPEVIEW_ENVIRONMENT=production
+      # 默认使用SQLite，如需使用MySQL，取消下面的注释并配置相应环境变量
+      - SCRAPEVIEW_DB_TYPE=sqlite
+      - SCRAPEVIEW_SQLITE_PATH=/app/db/scrapeview.db
+      # - SCRAPEVIEW_DB_TYPE=mysql
+      # - SCRAPEVIEW_DB_HOST=db
+      # - SCRAPEVIEW_DB_PORT=3306
+      # - SCRAPEVIEW_DB_USER=scrapeview
+      # - SCRAPEVIEW_DB_PASSWORD=scrapeview_password
+      # - SCRAPEVIEW_DB_NAME=scrapeview
+      - LOG_LEVEL=INFO
+      - LOG_DIR=/app/logs
+    # 使用Dockerfile中的启动脚本，包含alembic迁移
+    # command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    # 如果使用MySQL，取消下面的注释
+    # depends_on:
+    #   db:
+    #     condition: service_healthy
 
-volumes:
-  downloads:
-  sqlite_data: 
+  # MySQL数据库服务（可选）
+  # db:
+  #   image: mysql:8.0
+  #   container_name: scrapeview-mysql
+  #   restart: unless-stopped
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=root_password
+  #     - MYSQL_DATABASE=scrapeview
+  #     - MYSQL_USER=scrapeview
+  #     - MYSQL_PASSWORD=scrapeview_password
+  #   volumes:
+  #     - mysql_data:/var/lib/mysql
+  #   ports:
+  #     - "3306:3306"
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #     start_period: 30s
+
+# 定义卷（当使用MySQL时取消注释）
+# volumes:
+#   mysql_data:
+#     driver: local

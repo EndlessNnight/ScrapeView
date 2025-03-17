@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 import os
 from pathlib import Path
+import logging
 
 class Settings(BaseModel):
     SECRET_KEY: str = "your-secret-key-here"
@@ -15,9 +16,25 @@ class Settings(BaseModel):
     IMAGES_URL_PREFIX: str = os.getenv("IMAGES_URL_PREFIX", "/api/v1/images")
     
     # HTTP代理设置
-    HTTP_PROXY: str = os.getenv("HTTP_PROXY", "")
-    HTTPS_PROXY: str = os.getenv("HTTPS_PROXY", "")
+    HTTP_PROXY: str = os.getenv("HTTP_PROXY", "http://127.0.0.1:7890")
+    HTTPS_PROXY: str = os.getenv("HTTPS_PROXY", "http://127.0.0.1:7890")
     # 不使用代理的域名列表
     NO_PROXY: str = os.getenv("NO_PROXY", "")
+    
+    # 日志配置
+    LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+    LOG_DIR: str = os.getenv("LOG_DIR", str(Path.cwd() / "logs"))
+    
+    @property
+    def log_level(self) -> int:
+        """获取日志级别"""
+        level_map = {
+            "DEBUG": logging.DEBUG,
+            "INFO": logging.INFO,
+            "WARNING": logging.WARNING,
+            "ERROR": logging.ERROR,
+            "CRITICAL": logging.CRITICAL
+        }
+        return level_map.get(self.LOG_LEVEL.upper(), logging.INFO)
     
 settings = Settings() 

@@ -3,8 +3,9 @@ from datetime import datetime
 from pydantic import HttpUrl
 from typing import Dict, Any, List
 from ..base import BasePTSite
-from ..schemas import TorrentInfo, TorrentDetails, SiteConfig, PTUserInfo, CategoryDetail
+from ..schemas import TorrentInfo, TorrentDetails, SiteConfig, PTUserInfo, CategoryDetail, TorrentInfoList
 from ..parser.nexusphp import NexusphpParser
+
 
 
 class DateTimeEncoder(json.JSONEncoder):
@@ -15,38 +16,28 @@ class DateTimeEncoder(json.JSONEncoder):
         return super().default(obj)
 
 
-class QingwaptSite(BasePTSite):
-    """Crabpt站点实现"""
+class KameptSite(BasePTSite):
+    """Kamept站点实现"""
     
     def __init__(self):
         config = SiteConfig(
-            site_name="QingwaPT",
-            base_url="https://www.qingwapt.com/",
+            site_name="Kamept",
+            base_url="https://kamept.com",
             login_url="/takelogin.php",
             torrents_url="/torrents.php",
             details_url="/details.php",
             search_url="/torrents.php",
             user_info_url="/index.php",
-            # default_categories=[401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413]
         )
 
         self.category_mapping = {
-            3: CategoryDetail(id=1, name="官种", params="tag=3"),
-            401: CategoryDetail(id=401, name="电影", params="cat=401"),
-            402: CategoryDetail(id=402, name="电视剧", params="cat=402"),
-            403: CategoryDetail(id=403, name="综艺", params="cat=403"),
-            404: CategoryDetail(id=404, name="纪录片", params="cat=404"),
-            405: CategoryDetail(id=405, name="动漫", params="cat=405"),
-            415: CategoryDetail(id=415, name="漫画", params="cat=415"),
-            408: CategoryDetail(id=408, name="音乐", params="cat=408"),
-            407: CategoryDetail(id=407, name="体育", params="cat=407"),
-            412: CategoryDetail(id=412, name="短剧", params="cat=412"),
+            # 1: CategoryDetail(id=1, name="官方", params="tag=gf"),
         }
 
         super().__init__(config, NexusphpParser())
     
 
-    def get_torrents(self, **kwargs) -> List[TorrentInfo]:
+    def get_torrents(self, **kwargs) -> TorrentInfoList:
         """获取种子列表
         
         Args:
@@ -69,7 +60,11 @@ class QingwaptSite(BasePTSite):
                     key, value = param.split("=")
                     params[key] = value
         soup = self._get_page(f"{self.base_url}{self.config.torrents_url}", params)
-        return self.parser.parse_torrent_list(soup)
+        data_list = self.parser.parse_torrent_list(soup)
+        for data in data_list.torrents:
+            if not data.cover_url.startswith(('http://', 'https://')):
+                data.cover_url = f"{self.base_url}/{data.cover_url.lstrip('/')}"
+        return data_list
 
     def get_details(self, torrent_id: int) -> TorrentDetails:
         """获取种子详情
@@ -78,9 +73,13 @@ class QingwaptSite(BasePTSite):
             torrent_id: 种子ID
         """
         soup = self._get_page(f"{self.base_url}{self.config.details_url}?id={torrent_id}")
-        return self.parser.parse_torrent_detail(soup)
+        details = self.parser.parse_torrent_detail(soup)
+        for i, descr_image in enumerate(details.descr_images):
+            if not descr_image.startswith(('http://', 'https://')):
+                details.descr_images[i] = f"{self.base_url}/{descr_image.lstrip('/')}"
+        return details
     
-    def get_search(self, keyword: str) -> List[TorrentInfo]:
+    def get_search(self, keyword: str) -> TorrentInfoList:
         """搜索种子
         
         Args:
@@ -127,12 +126,10 @@ class QingwaptSite(BasePTSite):
 
 def main():
     """主函数"""
-    # qingwapt = QingwaptSite()
-    # qingwapt.set_proxy("http://127.0.0.1:7892")
-    # cookie = ''
-    # qingwapt.set_cookies(cookie)
-    # print(qingwapt.get_user_info())
-    pass
+    kamept = KameptSite()
+    print(kamept.get_all_category())
+
+
 
 if __name__ == "__main__":
     main()

@@ -65,7 +65,11 @@ class NicePT(BasePTSite):
             torrent_id: 种子ID
         """
         soup = self._get_page(f"{self.base_url}{self.config.details_url}?id={torrent_id}")
-        return self.parser.parse_torrent_detail(soup)
+        details = self.parser.parse_torrent_detail(soup)
+        for i, descr_image in enumerate(details.descr_images):
+            if not descr_image.startswith(('http://', 'https://')):
+                details.descr_images[i] = f"{self.base_url}/{descr_image.lstrip('/')}"
+        return details
     
     def get_search(self, keyword: str) -> List[TorrentInfo]:
         """搜索种子

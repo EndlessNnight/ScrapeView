@@ -32,6 +32,11 @@ class APILoggingMiddleware(BaseHTTPMiddleware):
         ip_address = request.client.host if request.client else None
         user_agent = request.headers.get("user-agent")
         
+        # 记录请求信息到控制台
+        logger.info(f"请求: {method} {path} - IP: {ip_address}")
+        if query_params:
+            logger.debug(f"查询参数: {query_params}")
+        
         # 尝试读取请求体
         request_body = None
         has_binary_data = False
@@ -49,13 +54,15 @@ class APILoggingMiddleware(BaseHTTPMiddleware):
                     request_body = body_str
                     # 检查是否为JSON
                     json.loads(body_str)
+                    logger.debug(f"请求体: {body_str[:200]}{'...' if len(body_str) > 200 else ''}")
                 except UnicodeDecodeError:
                     # 二进制数据
                     has_binary_data = True
                     request_body = "二进制数据，未记录"
+                    logger.debug("请求体: 二进制数据")
                 except json.JSONDecodeError:
                     # 非JSON数据，但仍是文本
-                    pass
+                    logger.debug(f"请求体(非JSON): {body_str[:200]}{'...' if len(body_str) > 200 else ''}")
             except Exception as e:
                 logger.error(f"读取请求体时出错: {str(e)}")
                 request_body = "读取请求体时出错"
@@ -98,6 +105,9 @@ class APILoggingMiddleware(BaseHTTPMiddleware):
         
         # 计算请求处理时间
         duration_ms = int((time.time() - start_time) * 1000)
+        
+        # 记录响应信息到控制台
+        logger.info(f"响应: {method} {path} - 状态码: {status_code} - 耗时: {duration_ms}ms")
         
         # 异步保存日志到数据库
         try:
