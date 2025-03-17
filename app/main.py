@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from app.api.v1.endpoints import auth, douyin, task, api_log, notification, user, pt_site, health
+from app.api.v1.endpoints import auth, douyin, task, api_log, notification, user, pt_site, health, cookiecloud
 from app.core.config import settings
 from app.schemas.common import ApiResponse, ErrorCode
 from app.db.session import base_db, stop_pool_monitoring
@@ -120,6 +120,9 @@ app.include_router(notification.router, prefix="/v1/notifications", tags=["通�
 
 # 注册PT站点路由
 app.include_router(pt_site.router, prefix="/v1/pt_site", tags=["PT站点"])
+
+# 注册CookieCloud路由
+app.include_router(cookiecloud.router, prefix="/v1/cookiecloud", tags=["CookieCloud"])
 
 # 添加健康检查路由
 app.include_router(health.router, prefix="/v1", tags=["系统"])
